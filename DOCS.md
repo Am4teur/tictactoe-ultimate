@@ -30,15 +30,18 @@ Add prettier [configuration](prettier.config.ts) file.
 
 ```
 npm install \
-@react-navigation/native \
-@react-navigation/drawer \
-react-native-screens \
-native-base \
-X react-native-svg \
+-> @react-navigation/native \
+-> @react-navigation/drawer \
+-> react-native-reanimated \ (drawer needs this import)
+-> react-native-gesture-handler
+-> react-native-screens \
+-> native-base \
+-> react-native-safe-area-context \ (native-base needs this import)
+-> react-native-svg \ (native-base needs this import)
+-> @expo/vector-icons \
 ~ styled-components \
 ? styled-system \
-moti react-native-reanimated \
-react-native-safe-area-context \
+moti \
 shortid \
 @types/shortid \
 expo-linking \
