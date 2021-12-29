@@ -7,10 +7,10 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function AppContainer(props: Props) {
+export default function AppContainer({ children }: Props) {
   return (
     <NavigationContainer>
-      <NativeBaseProvider theme={theme}>{props.children}</NativeBaseProvider>
+      <NativeBaseProvider theme={theme}>{children}</NativeBaseProvider>
     </NavigationContainer>
   );
 }
