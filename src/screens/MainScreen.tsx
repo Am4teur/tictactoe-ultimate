@@ -13,6 +13,7 @@ import {
   ScrollView,
 } from "native-base";
 import { Feather } from "@expo/vector-icons";
+import ScreenWrapper from "../components/ScreenWrapper";
 
 interface MainScreenArgs {
   navigation: any;
@@ -32,7 +33,7 @@ const MainScreen = ({ navigation }: MainScreenArgs) => {
   };
 
   return (
-    <Center flex={1}>
+    <ScreenWrapper>
       <Stack alignItems="center">
         <Heading py="6">Ultimate Tic Tac Toe</Heading>
 
@@ -118,7 +119,7 @@ const MainScreen = ({ navigation }: MainScreenArgs) => {
       </Stack>
 
       <StatusBar style="auto" />
-    </Center>
+    </ScreenWrapper>
   );
 };
 
