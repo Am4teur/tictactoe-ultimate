@@ -21,6 +21,7 @@ const TTTGame = () => {
 
   const showValue = (i: number, j: number) => {
     const newSquares = squares.slice();
+    if (newSquares[i][j]) return;
     newSquares[i][j] = round % 2 === 0 ? "X" : "O";
     setSquares(newSquares);
     const newRound = round + 1;
