@@ -3,18 +3,19 @@ import { Button, Box } from "native-base";
 import Board from "./Board";
 
 //todo make the string a enum type
+type mark = "X" | "O" | "";
 
 const TTTGame = () => {
-  const initialBoard: string[][] = [
-    ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
-    ["N", "N", "N", "N", "N", "N", "N", "N", "N"],
-    ["N", "N", "N", "N", "N", "N", "N", "N", "N"],
-    ["N", "N", "N", "N", "N", "N", "N", "N", "N"],
-    ["N", "N", "N", "N", "N", "N", "N", "N", "N"],
-    ["N", "N", "N", "N", "N", "N", "N", "N", "N"],
-    ["N", "N", "N", "N", "N", "N", "N", "N", "N"],
-    ["N", "N", "N", "N", "N", "N", "N", "N", "N"],
-    ["N", "N", "N", "N", "N", "N", "N", "N", "N"],
+  const initialBoard: mark[][] = [
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", "", ""],
   ];
   const [squares, setSquares] = useState(initialBoard);
   const [round, setRound] = useState(0);
