@@ -1,12 +1,10 @@
-import { Center, Text, Button, Heading, Box, Stack } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import React from "react";
+import { Heading, Box, Stack } from "native-base";
 import ThemeToggle from "../components/ThemeToggle";
 import ScreenWrapper from "../components/ScreenWrapper";
+import GoBack from "../components/GoBack";
 
 const SettingsScreen = ({ navigation }: any) => {
-  const goBack = () => {
-    navigation.goBack();
-  };
   return (
     <ScreenWrapper>
       <Stack alignItems="center">
@@ -16,9 +14,7 @@ const SettingsScreen = ({ navigation }: any) => {
             <ThemeToggle />
           </Box>
         </Box>
-        <Button onPress={goBack} my="4">
-          <Text>Go Back</Text>
-        </Button>
+        <GoBack navigation={navigation} />
       </Stack>
     </ScreenWrapper>
   );

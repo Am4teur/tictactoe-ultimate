@@ -1,12 +1,10 @@
-import { Center, Text, Button, Heading, Box, Stack } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import React from "react";
+import { Heading, Box, Stack } from "native-base";
 import ScreenWrapper from "../components/ScreenWrapper";
 import TTTGame from "../components/TTTGame/TTTGame";
+import GoBack from "../components/GoBack";
 
 const SingleplayerScreen = ({ navigation }: any) => {
-  const goBack = () => {
-    navigation.goBack();
-  };
   return (
     <ScreenWrapper>
       <Stack alignItems="center">
@@ -14,9 +12,7 @@ const SingleplayerScreen = ({ navigation }: any) => {
         <Box flex={1} justifyContent="center">
           <TTTGame />
         </Box>
-        <Button onPress={goBack} my="4">
-          <Text>Go Back</Text>
-        </Button>
+        <GoBack navigation={navigation} />
       </Stack>
     </ScreenWrapper>
   );

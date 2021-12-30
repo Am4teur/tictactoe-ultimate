@@ -1,17 +1,13 @@
-import { Center, Text, Button, Heading } from "native-base";
-import { Feather } from "@expo/vector-icons";
+import React from "react";
+import { Heading } from "native-base";
 import ScreenWrapper from "../components/ScreenWrapper";
+import GoBack from "../components/GoBack";
 
 const MultiplayerScreen = ({ navigation }: any) => {
-  const goBack = () => {
-    navigation.goBack();
-  };
   return (
     <ScreenWrapper>
       <Heading mb="8">Multiplayer Screen</Heading>
-      <Button onPress={goBack}>
-        <Text color="white">Go Back</Text>
-      </Button>
+      <GoBack navigation={navigation} />
     </ScreenWrapper>
   );
 };
