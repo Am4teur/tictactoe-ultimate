@@ -1,16 +1,16 @@
 import { Button, Box, Row, HStack, VStack, Text } from "native-base";
 import { useState } from "react";
 import Square from "./Square";
+import mark from "../../types/mark";
 
-type Props = {
-  nextRound: () => void;
-  player: "X" | "O";
-};
-
-type mark = "X" | "O" | "";
 const THREE = 3;
 
-const Board = ({ nextRound, player }: Props) => {
+interface IProps {
+  nextRound: () => void;
+  player: mark;
+}
+
+const Board = ({ nextRound, player }: IProps) => {
   const initialBoard: mark[][] = [
     ["", "", ""],
     ["", "", ""],
