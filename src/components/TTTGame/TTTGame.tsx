@@ -11,10 +11,21 @@ const TTTGame = () => {
     setPlayer(newPlayer);
   };
 
+  const initialBoards = [{ isPlayable: true }, { isPlayable: true }];
+
+  const [boards, setBoards] = useState(initialBoards);
+
   return (
     <>
-      <Board nextPlayer={nextPlayer} playerMark={player} />
-      <Board nextPlayer={nextPlayer} playerMark={player} />
+      {boards.map((state) => {
+        return (
+          <Board
+            nextPlayer={nextPlayer}
+            playerMark={player}
+            isPlayable={state.isPlayable}
+          />
+        );
+      })}
     </>
   );
 };

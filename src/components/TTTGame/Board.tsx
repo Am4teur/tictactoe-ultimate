@@ -8,6 +8,11 @@ const THREE = 3;
 interface IProps {
   nextPlayer: () => void;
   playerMark: mark;
+  isPlayable: boolean;
+  // showValue/ playedX
+  //squares
+  //reset temp
+  //hasWon isFinished
 }
 
 const Board = ({ nextPlayer, playerMark }: IProps) => {
