@@ -6,23 +6,27 @@ import Mark from "../../types/Mark";
 const THREE = 3;
 
 interface IProps {
-  playerHasPlayed: (i: number, j: number) => void;
+  playerHasPlayed: (i: number, j: number, hasWon: boolean) => void;
   playerMark: Mark;
   isPlayable: boolean;
+  playerWonMark: Mark;
 }
 
-const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
+const Board = ({
+  playerHasPlayed,
+  playerMark,
+  isPlayable,
+  playerWonMark,
+}: IProps) => {
   const initialBoard: Mark[][] = [
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
   ];
   const [squares, setSquares] = useState(initialBoard);
-  const [hasWon, setHasWon] = useState(false);
 
   const reset = () => {
     setSquares(initialBoard);
-    setHasWon(false);
   };
 
   const didWon = (row: number, col: number) => {
@@ -40,7 +44,6 @@ const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
       }
     }
     if (k === THREE) {
-      console.log("1");
       return true;
     }
 
@@ -50,7 +53,6 @@ const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
       }
     }
     if (k === THREE) {
-      console.log("2");
       return true;
     }
 
@@ -60,7 +62,6 @@ const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
       }
     }
     if (k === THREE) {
-      console.log("3");
       return true;
     }
 
@@ -73,7 +74,6 @@ const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
       }
     }
     if (k === THREE) {
-      console.log("4");
       return true;
     }
 
@@ -81,20 +81,14 @@ const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
   };
 
   const showValue = (/*boardNumber: number,*/ i: number, j: number) => {
-    if (hasWon || !isPlayable) return;
+    if (playerWonMark || !isPlayable) return;
 
     const newSquares = squares.slice();
     if (newSquares[i][j]) return;
     newSquares[i][j] = playerMark;
     setSquares(newSquares);
 
-    if (didWon(i, j)) {
-      //TODO need a board number for this
-      setHasWon(true);
-      return;
-    }
-
-    playerHasPlayed(i, j);
+    playerHasPlayed(i, j, didWon(i, j));
   };
 
   // useEffect(() => {
@@ -104,7 +98,19 @@ const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
   return (
     <>
       <VStack>
-        <Center rounded="lg" p={3} bg={isPlayable ? "red.400" : null}>
+        <Center
+          rounded="lg"
+          p={3}
+          bg={
+            playerWonMark === "O"
+              ? "blue.400"
+              : playerWonMark === "X"
+              ? "red.400"
+              : isPlayable
+              ? "green.400"
+              : null
+          }
+        >
           {squares.map((row, i) => (
             <HStack key={i}>
               {row.map((v, j) => (
@@ -122,7 +128,7 @@ const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
         <Button onPress={reset} variant="unstyled">
           <Text fontWeight="medium">Reset</Text>
         </Button>
-        {hasWon && <Text>{} Winner!</Text>}
+        {playerWonMark ? <Text>{} Winner!</Text> : null}
       </VStack>
     </>
   );

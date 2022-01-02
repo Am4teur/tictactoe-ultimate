@@ -1,2 +1,2 @@
-type mark = "X" | "O" | "";
-export default mark;
+type Mark = "X" | "O" | "";
+export default Mark;
