@@ -2,14 +2,16 @@ import { Button, Box, Row, HStack, VStack, Text, Center } from "native-base";
 import React, { useState, useEffect } from "react";
 import Square from "./Square";
 import Mark from "../../types/Mark";
+import { ICoord } from "../../types/ICoord";
 
 const THREE = 3;
 
 interface IProps {
-  playerHasPlayed: (i: number, j: number, hasWon: boolean) => void;
+  playerHasPlayed: (id: ICoord, i: number, j: number, hasWon: boolean) => void;
   playerMark: Mark;
   isPlayable: boolean;
   playerWonMark: Mark;
+  id: ICoord;
 }
 
 const Board = ({
@@ -17,6 +19,7 @@ const Board = ({
   playerMark,
   isPlayable,
   playerWonMark,
+  id,
 }: IProps) => {
   const initialBoard: Mark[][] = [
     ["", "", ""],
@@ -88,12 +91,8 @@ const Board = ({
     newSquares[i][j] = playerMark;
     setSquares(newSquares);
 
-    playerHasPlayed(i, j, didWon(i, j));
+    playerHasPlayed(id, i, j, didWon(i, j));
   };
-
-  // useEffect(() => {
-  //   isPlayable;
-  // }, [isPlayable]);
 
   return (
     <>

@@ -2,28 +2,31 @@ import React, { useState } from "react";
 import { Button, Box, HStack, Text, VStack } from "native-base";
 import Board from "./Board";
 import Mark from "../../types/Mark";
+import { ICoord } from "../../types/ICoord";
 
 const THREE = 3;
 
 const TTTGame = () => {
   const [player, setPlayer] = useState<Mark>("O");
-  const [currentBoard, setCurrentBoard] = useState<any>(null);
 
-  const playerHasPlayed = (i: number, j: number, hasWon: boolean) => {
+  const playerHasPlayed = (
+    boardId: ICoord,
+    i: number,
+    j: number,
+    hasWon: boolean
+  ) => {
     const newBoards = boards.slice();
-    if (currentBoard) {
-      newBoards[currentBoard.i][currentBoard.j].isPlayable = false;
-      if (hasWon) {
-        newBoards[currentBoard.i][currentBoard.j].playerWonMark = player;
-      }
-    } else {
-      //recheck this, i think it only happens in the first round
-      newBoards.map((row) => {
-        row.map((v) => {
-          return Object.assign(v, { isPlayable: false });
-        });
-      });
+
+    if (hasWon) {
+      newBoards[boardId.i][boardId.j].playerWonMark = player;
     }
+    setPlayer(player === "O" ? "X" : "O");
+
+    newBoards.map((row) => {
+      row.map((v) => {
+        return Object.assign(v, { isPlayable: false });
+      });
+    });
 
     if (newBoards[i][j].playerWonMark) {
       newBoards.map((row) => {
@@ -33,12 +36,9 @@ const TTTGame = () => {
           }
         });
       });
-      setCurrentBoard(null);
     } else {
       newBoards[i][j].isPlayable = true;
-      setCurrentBoard({ i: i, j: j });
     }
-    setPlayer(player === "O" ? "X" : "O");
     setBoards(newBoards);
   };
 
@@ -51,6 +51,7 @@ const TTTGame = () => {
           key: `${i}-${j}`,
           isPlayable: true,
           playerWonMark: "" as Mark,
+          boardId: { i, j } as ICoord,
         });
       }
       initialBoards.push(row);
@@ -71,6 +72,7 @@ const TTTGame = () => {
                 playerMark={player}
                 isPlayable={v.isPlayable}
                 playerWonMark={v.playerWonMark}
+                id={v.boardId}
               />
             ))}
           </HStack>
