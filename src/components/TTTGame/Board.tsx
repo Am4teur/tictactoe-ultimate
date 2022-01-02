@@ -1,22 +1,18 @@
-import { Button, Box, Row, HStack, VStack, Text } from "native-base";
-import { useState } from "react";
+import { Button, Box, Row, HStack, VStack, Text, Center } from "native-base";
+import React, { useState, useEffect } from "react";
 import Square from "./Square";
-import mark from "../../types/mark";
+import Mark from "../../types/Mark";
 
 const THREE = 3;
 
 interface IProps {
-  nextPlayer: () => void;
-  playerMark: mark;
+  playerHasPlayed: (i: number, j: number) => void;
+  playerMark: Mark;
   isPlayable: boolean;
-  // showValue/ playedX
-  //squares
-  //reset temp
-  //hasWon isFinished
 }
 
-const Board = ({ nextPlayer, playerMark }: IProps) => {
-  const initialBoard: mark[][] = [
+const Board = ({ playerHasPlayed, playerMark, isPlayable }: IProps) => {
+  const initialBoard: Mark[][] = [
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
@@ -36,7 +32,7 @@ const Board = ({ nextPlayer, playerMark }: IProps) => {
     // [i][j] i++
     // same but diagonal
     // [k][k] k++
-    const symbol: mark = squares[row][col];
+    const symbol: Mark = squares[row][col];
 
     for (var k = 0; k < THREE; k++) {
       if (squares[row][k] === "" || squares[row][k] !== symbol) {
@@ -85,7 +81,7 @@ const Board = ({ nextPlayer, playerMark }: IProps) => {
   };
 
   const showValue = (/*boardNumber: number,*/ i: number, j: number) => {
-    if (hasWon) return;
+    if (hasWon || !isPlayable) return;
 
     const newSquares = squares.slice();
     if (newSquares[i][j]) return;
@@ -98,33 +94,36 @@ const Board = ({ nextPlayer, playerMark }: IProps) => {
       return;
     }
 
-    nextPlayer();
+    playerHasPlayed(i, j);
   };
+
+  // useEffect(() => {
+  //   isPlayable;
+  // }, [isPlayable]);
 
   return (
     <>
       <VStack>
-        {squares.map((row, i) => (
-          <HStack key={i}>
-            {row.map((v, j) => (
-              <Square
-                key={`${i} ${j}`}
-                value={v}
-                showValue={showValue}
-                i={i}
-                j={j}
-              />
-            ))}
-          </HStack>
-        ))}
+        <Center rounded="lg" p={3} bg={isPlayable ? "red.400" : null}>
+          {squares.map((row, i) => (
+            <HStack key={i}>
+              {row.map((v, j) => (
+                <Square
+                  key={`${i} ${j}`}
+                  value={v}
+                  showValue={showValue}
+                  i={i}
+                  j={j}
+                />
+              ))}
+            </HStack>
+          ))}
+        </Center>
+        <Button onPress={reset} variant="unstyled">
+          <Text fontWeight="medium">Reset</Text>
+        </Button>
+        {hasWon && <Text>{} Winner!</Text>}
       </VStack>
-
-      <Button my="4" onPress={reset} shadow="5">
-        <Text fontSize="xl" fontWeight="medium">
-          Reset
-        </Text>
-      </Button>
-      {hasWon && <Text>{} Winner!</Text>}
     </>
   );
 };
