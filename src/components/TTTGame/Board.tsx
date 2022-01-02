@@ -6,11 +6,11 @@ import mark from "../../types/mark";
 const THREE = 3;
 
 interface IProps {
-  nextRound: () => void;
-  player: mark;
+  nextPlayer: () => void;
+  playerMark: mark;
 }
 
-const Board = ({ nextRound, player }: IProps) => {
+const Board = ({ nextPlayer, playerMark }: IProps) => {
   const initialBoard: mark[][] = [
     ["", "", ""],
     ["", "", ""],
@@ -84,7 +84,7 @@ const Board = ({ nextRound, player }: IProps) => {
 
     const newSquares = squares.slice();
     if (newSquares[i][j]) return;
-    newSquares[i][j] = player;
+    newSquares[i][j] = playerMark;
     setSquares(newSquares);
 
     if (didWon(i, j)) {
@@ -93,7 +93,7 @@ const Board = ({ nextRound, player }: IProps) => {
       return;
     }
 
-    nextRound();
+    nextPlayer();
   };
 
   return (

@@ -13,8 +13,8 @@ const TTTGame = () => {
 
   return (
     <>
-      <Board nextRound={nextPlayer} player={player} />
-      <Board nextRound={nextPlayer} player={player} />
+      <Board nextPlayer={nextPlayer} playerMark={player} />
+      <Board nextPlayer={nextPlayer} playerMark={player} />
     </>
   );
 };
