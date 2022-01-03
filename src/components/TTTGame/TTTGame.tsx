@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Box, HStack, Text, VStack } from "native-base";
 import Board from "./Board";
-import { Mark } from "../../types/Mark";
+import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
 
 const THREE = 3;
@@ -19,6 +19,9 @@ const TTTGame = () => {
 
     if (boardResultMark) {
       newBoards[boardId.i][boardId.j].playerWonMark = boardResultMark;
+      if (board9x9ResultMark(boardId.i, boardId.j)) {
+        console.log(`Finished ${board9x9ResultMark(boardId.i, boardId.j)}`);
+      }
     }
     setPlayer(player === "O" ? "X" : "O");
 
@@ -59,6 +62,69 @@ const TTTGame = () => {
     return initialBoards;
   };
   const [boards, setBoards] = useState(initBoards());
+
+  const board9x9ResultMark = (row: number, col: number): Mark => {
+    /*
+    returns winner Mark === 'O' || 'X', if there is a winner
+    returns markEnum.DRAW === 'D',      if there is a draw
+    returns markEnum.EMPTY === '' ,     if it its still playable 
+    */
+    for (var k = 0; k < THREE; k++) {
+      if (
+        boards[row][k].playerWonMark === "" ||
+        boards[row][k].playerWonMark !== player
+      ) {
+        break;
+      }
+    }
+    if (k === THREE) {
+      return player;
+    }
+
+    for (var k = 0; k < THREE; k++) {
+      if (
+        boards[k][col].playerWonMark === "" ||
+        boards[k][col].playerWonMark !== player
+      ) {
+        break;
+      }
+    }
+    if (k === THREE) {
+      return player;
+    }
+
+    for (var k = 0; k < THREE; k++) {
+      if (
+        boards[k][k].playerWonMark === "" ||
+        boards[k][k].playerWonMark !== player
+      ) {
+        break;
+      }
+    }
+    if (k === THREE) {
+      return player;
+    }
+
+    for (var k = 0; k < THREE; k++) {
+      if (
+        boards[THREE - k - 1][k].playerWonMark === "" ||
+        boards[THREE - k - 1][k].playerWonMark !== player
+      ) {
+        break;
+      }
+    }
+    if (k === THREE) {
+      return player;
+    }
+
+    for (let row of boards) {
+      for (let mark of row) {
+        if (!mark.playerWonMark) return markEnum.EMPTY;
+      }
+    }
+
+    return markEnum.DRAW;
+  };
 
   return (
     <>
