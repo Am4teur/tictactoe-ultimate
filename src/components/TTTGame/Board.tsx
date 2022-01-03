@@ -107,18 +107,9 @@ const Board = ({
       <VStack>
         <Center
           rounded="lg"
-          p={3}
-          bg={
-            playerWonMark === "O"
-              ? "blue.400"
-              : playerWonMark === "X"
-              ? "red.400"
-              : playerWonMark === markEnum.DRAW
-              ? "gray.400"
-              : isPlayable
-              ? "green.400"
-              : null
-          }
+          borderWidth={2}
+          borderColor="black"
+          borderStyle="solid"
         >
           {squares.map((row, i) => (
             <HStack key={i}>
@@ -129,15 +120,22 @@ const Board = ({
                   showValue={showValue}
                   i={i}
                   j={j}
+                  borderColor={
+                    playerWonMark === "O"
+                      ? "blue.400"
+                      : playerWonMark === "X"
+                      ? "red.400"
+                      : playerWonMark === markEnum.DRAW
+                      ? "gray.400"
+                      : isPlayable
+                      ? "green.400"
+                      : "black"
+                  }
                 />
               ))}
             </HStack>
           ))}
         </Center>
-        <Button onPress={reset} variant="unstyled">
-          <Text fontWeight="medium">Reset</Text>
-        </Button>
-        {playerWonMark ? <Text>{} Winner!</Text> : null}
       </VStack>
     </>
   );
