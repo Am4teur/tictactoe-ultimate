@@ -1,13 +1,18 @@
 import { Button, Box, Row, HStack, VStack, Text, Center } from "native-base";
 import React, { useState, useEffect } from "react";
 import Square from "./Square";
-import Mark from "../../types/Mark";
+import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
 
 const THREE = 3;
 
 interface IProps {
-  playerHasPlayed: (id: ICoord, i: number, j: number, hasWon: boolean) => void;
+  playerHasPlayed: (
+    id: ICoord,
+    i: number,
+    j: number,
+    boardResultMark: Mark
+  ) => void;
   playerMark: Mark;
   isPlayable: boolean;
   playerWonMark: Mark;
@@ -32,55 +37,58 @@ const Board = ({
     setSquares(initialBoard);
   };
 
-  const didWon = (row: number, col: number) => {
-    // check if row is all === and !== ''
-    // [i][j] j++
-    // same but colum
-    // [i][j] i++
-    // same but diagonal
-    // [k][k] k++
-    const symbol: Mark = squares[row][col];
-
+  const boardResultMark = (row: number, col: number): Mark => {
+    /*
+    returns winner Mark === 'O' || 'X', if there is a winner
+    returns markEnum.DRAW === 'D',      if there is a draw
+    returns markEnum.EMPTY === '' ,     if it its still playable 
+    */
     for (var k = 0; k < THREE; k++) {
-      if (squares[row][k] === "" || squares[row][k] !== symbol) {
+      if (squares[row][k] === "" || squares[row][k] !== playerMark) {
         break;
       }
     }
     if (k === THREE) {
-      return true;
+      return playerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
-      if (squares[k][col] === "" || squares[k][col] !== symbol) {
+      if (squares[k][col] === "" || squares[k][col] !== playerMark) {
         break;
       }
     }
     if (k === THREE) {
-      return true;
+      return playerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
-      if (squares[k][k] === "" || squares[k][k] !== symbol) {
+      if (squares[k][k] === "" || squares[k][k] !== playerMark) {
         break;
       }
     }
     if (k === THREE) {
-      return true;
+      return playerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
       if (
         squares[THREE - k - 1][k] === "" ||
-        squares[THREE - k - 1][k] !== symbol
+        squares[THREE - k - 1][k] !== playerMark
       ) {
         break;
       }
     }
     if (k === THREE) {
-      return true;
+      return playerMark;
     }
 
-    return false;
+    for (let row of squares) {
+      for (let mark of row) {
+        if (!mark) return markEnum.EMPTY;
+      }
+    }
+
+    return markEnum.DRAW;
   };
 
   const showValue = (/*boardNumber: number,*/ i: number, j: number) => {
@@ -91,7 +99,7 @@ const Board = ({
     newSquares[i][j] = playerMark;
     setSquares(newSquares);
 
-    playerHasPlayed(id, i, j, didWon(i, j));
+    playerHasPlayed(id, i, j, boardResultMark(i, j));
   };
 
   return (
@@ -105,6 +113,8 @@ const Board = ({
               ? "blue.400"
               : playerWonMark === "X"
               ? "red.400"
+              : playerWonMark === markEnum.DRAW
+              ? "gray.400"
               : isPlayable
               ? "green.400"
               : null

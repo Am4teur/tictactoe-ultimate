@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Box, HStack, Text, VStack } from "native-base";
 import Board from "./Board";
-import Mark from "../../types/Mark";
+import { Mark } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
 
 const THREE = 3;
@@ -13,12 +13,12 @@ const TTTGame = () => {
     boardId: ICoord,
     i: number,
     j: number,
-    hasWon: boolean
+    boardResultMark: Mark
   ) => {
     const newBoards = boards.slice();
 
-    if (hasWon) {
-      newBoards[boardId.i][boardId.j].playerWonMark = player;
+    if (boardResultMark) {
+      newBoards[boardId.i][boardId.j].playerWonMark = boardResultMark;
     }
     setPlayer(player === "O" ? "X" : "O");
 

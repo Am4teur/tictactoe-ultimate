@@ -1,2 +1,6 @@
-type Mark = "X" | "O" | "";
-export default Mark;
+export type Mark = "" | "O" | "X" | "D";
+
+export enum markEnum {
+  DRAW = "D",
+  EMPTY = "",
+}
