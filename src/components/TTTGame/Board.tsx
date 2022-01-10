@@ -8,12 +8,7 @@ import Board3by3 from "../../images/Board3by3";
 const THREE = 3;
 
 interface IProps {
-  playerHasPlayed: (
-    id: ICoord,
-    i: number,
-    j: number,
-    boardResultMark: Mark
-  ) => void;
+  onPlay: (id: ICoord, i: number, j: number, boardResultMark: Mark) => void;
   playerMark: Mark;
   isPlayable: boolean;
   playerWonMark: Mark;
@@ -21,7 +16,7 @@ interface IProps {
 }
 
 const Board = ({
-  playerHasPlayed,
+  onPlay,
   playerMark,
   isPlayable,
   playerWonMark,
@@ -33,10 +28,6 @@ const Board = ({
     ["", "", ""],
   ];
   const [squares, setSquares] = useState(initialBoard);
-
-  const reset = () => {
-    setSquares(initialBoard);
-  };
 
   const boardResultMark = (row: number, col: number): Mark => {
     /*
@@ -100,7 +91,7 @@ const Board = ({
     newSquares[i][j] = playerMark;
     setSquares(newSquares);
 
-    playerHasPlayed(id, i, j, boardResultMark(i, j));
+    onPlay(id, i, j, boardResultMark(i, j));
   };
 
   return (

@@ -10,7 +10,7 @@ const THREE = 3;
 const TTTGame = () => {
   const [player, setPlayer] = useState<Mark>("O");
 
-  const playerHasPlayed = (
+  const onPlay = (
     boardId: ICoord,
     i: number,
     j: number,
@@ -150,7 +150,7 @@ const TTTGame = () => {
               {row.map((v) => (
                 <Board
                   key={v.key}
-                  playerHasPlayed={playerHasPlayed}
+                  onPlay={onPlay}
                   playerMark={player}
                   isPlayable={v.isPlayable}
                   playerWonMark={v.playerWonMark}
