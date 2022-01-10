@@ -4,11 +4,18 @@ import ScreenWrapper from "../components/ScreenWrapper";
 import TTTGame from "../components/TTTGame/TTTGame";
 import GoBack from "../components/GoBack";
 
-const SingleplayerScreen = ({ navigation }: any) => {
+interface SingleplayerProps {
+  navigation: any;
+  route: any;
+}
+
+const SingleplayerScreen = ({ navigation, route }: SingleplayerProps) => {
+  const { state } = route.params;
+
   return (
     <ScreenWrapper>
       <Stack alignItems="center">
-        <Heading my="4">Singleplayer Screen</Heading>
+        <Heading my="4">Singleplayer {state} Screen </Heading>
         <Box flex={1} justifyContent="center">
           <TTTGame />
         </Box>

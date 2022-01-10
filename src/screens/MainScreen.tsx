@@ -20,8 +20,8 @@ interface MainScreenArgs {
 }
 
 const MainScreen = ({ navigation }: MainScreenArgs) => {
-  const goToSingleplayerScreen = () => {
-    navigation.navigate("Singleplayer");
+  const goToSingleplayerOptionsScreen = () => {
+    navigation.navigate("SingleplayerOptions");
   };
 
   const goToMultiplayerScreen = () => {
@@ -56,7 +56,7 @@ const MainScreen = ({ navigation }: MainScreenArgs) => {
             size="lg"
             px="8"
             py="5"
-            onPress={goToSingleplayerScreen}
+            onPress={goToSingleplayerOptionsScreen}
             shadow="5"
           >
             <HStack alignItems="center">
