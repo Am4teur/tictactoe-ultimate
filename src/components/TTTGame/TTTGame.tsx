@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Button, Box, HStack, Text, VStack } from "native-base";
+import { Center, Button, Box, HStack, Text, VStack, View } from "native-base";
 import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
+import Board3by3 from "../../images/Board3by3";
 
 const THREE = 3;
 
@@ -129,20 +130,36 @@ const TTTGame = () => {
   return (
     <>
       <VStack>
-        {boards.map((row, i) => (
-          <HStack key={i}>
-            {row.map((v) => (
-              <Board
-                key={v.key}
-                playerHasPlayed={playerHasPlayed}
-                playerMark={player}
-                isPlayable={v.isPlayable}
-                playerWonMark={v.playerWonMark}
-                id={v.boardId}
-              />
-            ))}
-          </HStack>
-        ))}
+        <Center>
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+            h="100%"
+            w="100%"
+          >
+            {/* https://docs.nativebase.io/default-theme */}
+            <Board3by3 lineColor={"#000"} />
+          </Box>
+          {boards.map((row, i) => (
+            <HStack key={i}>
+              {row.map((v) => (
+                <Board
+                  key={v.key}
+                  playerHasPlayed={playerHasPlayed}
+                  playerMark={player}
+                  isPlayable={v.isPlayable}
+                  playerWonMark={v.playerWonMark}
+                  id={v.boardId}
+                />
+              ))}
+            </HStack>
+          ))}
+        </Center>
       </VStack>
     </>
   );

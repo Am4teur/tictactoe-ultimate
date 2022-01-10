@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Square from "./Square";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
+import Board3by3 from "../../images/Board3by3";
 
 const THREE = 3;
 
@@ -105,12 +106,33 @@ const Board = ({
   return (
     <>
       <VStack>
-        <Center
-          rounded="lg"
-          borderWidth={2}
-          borderColor="black"
-          borderStyle="solid"
-        >
+        <Center>
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+            }}
+            h="100%"
+            w="100%"
+          >
+            {/* https://docs.nativebase.io/default-theme */}
+            <Board3by3
+              lineColor={
+                playerWonMark === "O"
+                  ? "#1a91ff" // darkBlue.400
+                  : playerWonMark === "X"
+                  ? "#dc2626" // red.600
+                  : playerWonMark === markEnum.DRAW
+                  ? "#737373" // trueGray.500
+                  : isPlayable
+                  ? "#22c55e" // green.500
+                  : "#000"
+              }
+            />
+          </Box>
           {squares.map((row, i) => (
             <HStack key={i}>
               {row.map((v, j) => (
@@ -120,17 +142,6 @@ const Board = ({
                   showValue={showValue}
                   i={i}
                   j={j}
-                  borderColor={
-                    playerWonMark === "O"
-                      ? "blue.400"
-                      : playerWonMark === "X"
-                      ? "red.400"
-                      : playerWonMark === markEnum.DRAW
-                      ? "gray.400"
-                      : isPlayable
-                      ? "green.400"
-                      : "black"
-                  }
                 />
               ))}
             </HStack>
