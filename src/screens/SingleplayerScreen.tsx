@@ -10,14 +10,14 @@ interface SingleplayerProps {
 }
 
 const SingleplayerScreen = ({ navigation, route }: SingleplayerProps) => {
-  const { state } = route.params;
+  const options = route.params;
 
   return (
     <ScreenWrapper>
       <Stack alignItems="center">
-        <Heading my="4">Singleplayer {state} Screen </Heading>
+        <Heading my="4">Singleplayer Screen </Heading>
         <Box flex={1} justifyContent="center">
-          <TTTGame />
+          <TTTGame options={options} />
         </Box>
         <GoBack navigation={navigation} />
       </Stack>

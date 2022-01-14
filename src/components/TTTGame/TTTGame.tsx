@@ -7,8 +7,14 @@ import Board3by3 from "../../images/Board3by3";
 
 const THREE = 3;
 
-const TTTGame = () => {
-  const [player, setPlayer] = useState<Mark>("O");
+interface TTTGameProps {
+  options: { ws: number; pm: string; bd: number };
+}
+
+const TTTGame = ({ options }: TTTGameProps) => {
+  const [player, setPlayer] = useState<Mark>(options.pm as Mark);
+
+  console.log(options.pm);
 
   const onPlay = (
     boardId: ICoord,

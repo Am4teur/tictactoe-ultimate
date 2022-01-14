@@ -10,7 +10,7 @@ const ScreenWrapper = (props: Props) => {
     <Center
       _dark={{ bg: "blueGray.900" }}
       _light={{ bg: "blueGray.50" }}
-      px={4}
+      p={4}
       flex={1}
     >
       {props.children}
