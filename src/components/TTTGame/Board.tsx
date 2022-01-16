@@ -4,6 +4,7 @@ import Square from "./Square";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
 import Board3by3 from "../../images/Board3by3";
+import Board3by3Straight from "../../images/Board3by3Straight";
 
 const THREE = 3;
 
@@ -13,6 +14,7 @@ interface IProps {
   isPlayable: boolean;
   playerWonMark: Mark;
   id: ICoord;
+  isBoardDesignStraight: boolean;
 }
 
 const Board = ({
@@ -21,6 +23,7 @@ const Board = ({
   isPlayable,
   playerWonMark,
   id,
+  isBoardDesignStraight,
 }: IProps) => {
   const initialBoard: Mark[][] = [
     ["", "", ""],
@@ -94,6 +97,18 @@ const Board = ({
     onPlay(id, i, j, boardResultMark(i, j));
   };
 
+  const getLineColor = (): string => {
+    return playerWonMark === "O"
+      ? "#1a91ff" // darkBlue.400
+      : playerWonMark === "X"
+      ? "#dc2626" // red.600
+      : playerWonMark === markEnum.DRAW
+      ? "#737373" // trueGray.500
+      : isPlayable
+      ? "#22c55e" // green.500
+      : "#000";
+  };
+
   return (
     <>
       <VStack>
@@ -110,19 +125,11 @@ const Board = ({
             w="100%"
           >
             {/* https://docs.nativebase.io/default-theme */}
-            <Board3by3
-              lineColor={
-                playerWonMark === "O"
-                  ? "#1a91ff" // darkBlue.400
-                  : playerWonMark === "X"
-                  ? "#dc2626" // red.600
-                  : playerWonMark === markEnum.DRAW
-                  ? "#737373" // trueGray.500
-                  : isPlayable
-                  ? "#22c55e" // green.500
-                  : "#000"
-              }
-            />
+            {isBoardDesignStraight ? (
+              <Board3by3Straight lineColor={getLineColor()} small={true} />
+            ) : (
+              <Board3by3 lineColor={getLineColor()} />
+            )}
           </Box>
           {squares.map((row, i) => (
             <HStack key={i}>

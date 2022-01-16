@@ -1,6 +1,6 @@
+import React from "react";
 import { Feather } from "@expo/vector-icons";
 import { Text, Button, HStack, useColorModeValue } from "native-base";
-import React from "react";
 
 const GoBack = ({ navigation }: any) => {
   const goBack = () => {

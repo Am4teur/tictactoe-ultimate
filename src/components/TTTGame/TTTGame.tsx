@@ -4,6 +4,7 @@ import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
 import Board3by3 from "../../images/Board3by3";
+import Board3by3Straight from "../../images/Board3by3Straight";
 
 const THREE = 3;
 
@@ -148,8 +149,11 @@ const TTTGame = ({ options }: TTTGameProps) => {
             h="100%"
             w="100%"
           >
-            {/* https://docs.nativebase.io/default-theme */}
-            <Board3by3 lineColor={"#000"} />
+            {options.bd === 0 ? (
+              <Board3by3Straight lineColor={"#000"} small={false} />
+            ) : (
+              <Board3by3 lineColor={"#000"} />
+            )}
           </Box>
           {boards.map((row, i) => (
             <HStack key={i}>
@@ -161,6 +165,7 @@ const TTTGame = ({ options }: TTTGameProps) => {
                   isPlayable={v.isPlayable}
                   playerWonMark={v.playerWonMark}
                   id={v.boardId}
+                  isBoardDesignStraight={options.bd === 0}
                 />
               ))}
             </HStack>
