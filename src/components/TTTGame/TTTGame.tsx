@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Center, Button, Box, HStack, Text, VStack, View } from "native-base";
 import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
@@ -10,14 +10,50 @@ const THREE = 3;
 
 interface TTTGameProps {
   options: { ws: number; pm: string; bd: number };
+  navigation: any;
 }
 
-const TTTGame = ({ options }: TTTGameProps) => {
+interface BoardData {
+  key: string;
+  isPlayable: boolean;
+  playerWonMark: Mark;
+  boardId: ICoord;
+}
+
+const TTTGame = ({ options, navigation }: TTTGameProps) => {
   const [player, setPlayer] = useState<Mark>(options.pm as Mark);
 
-  console.log(options.pm);
+  const initBoards = () => {
+    const initialBoards = [];
+    for (let i = 0; i < THREE; i++) {
+      let row = [];
+      for (let j = 0; j < THREE; j++) {
+        row.push({
+          key: `${i}-${j}`,
+          isPlayable: true,
+          playerWonMark: "" as Mark,
+          boardId: { i, j } as ICoord,
+        });
+      }
+      initialBoards.push(row);
+    }
+    return initialBoards;
+  };
+  const [boards, setBoards] = useState<BoardData[][]>(initBoards());
 
-  const onPlay = (
+  const reset = () => {
+    setPlayer(options.pm as Mark);
+    setBoards(initBoards());
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      reset();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  const handleTurn = (
     boardId: ICoord,
     i: number,
     j: number,
@@ -52,24 +88,6 @@ const TTTGame = ({ options }: TTTGameProps) => {
     }
     setBoards(newBoards);
   };
-
-  const initBoards = () => {
-    const initialBoards = [];
-    for (let i = 0; i < THREE; i++) {
-      let row = [];
-      for (let j = 0; j < THREE; j++) {
-        row.push({
-          key: `${i}-${j}`,
-          isPlayable: true,
-          playerWonMark: "" as Mark,
-          boardId: { i, j } as ICoord,
-        });
-      }
-      initialBoards.push(row);
-    }
-    return initialBoards;
-  };
-  const [boards, setBoards] = useState(initBoards());
 
   const board9x9ResultMark = (row: number, col: number): Mark => {
     /*
@@ -160,12 +178,13 @@ const TTTGame = ({ options }: TTTGameProps) => {
               {row.map((v) => (
                 <Board
                   key={v.key}
-                  onPlay={onPlay}
+                  handleTurn={handleTurn}
                   playerMark={player}
                   isPlayable={v.isPlayable}
                   playerWonMark={v.playerWonMark}
                   id={v.boardId}
                   isBoardDesignStraight={options.bd === 0}
+                  navigation={navigation}
                 />
               ))}
             </HStack>

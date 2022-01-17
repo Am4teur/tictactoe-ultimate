@@ -17,7 +17,7 @@ const SingleplayerScreen = ({ navigation, route }: SingleplayerProps) => {
       <Stack alignItems="center">
         <Heading my="4">Singleplayer Screen </Heading>
         <Box flex={1} justifyContent="center">
-          <TTTGame options={options} />
+          <TTTGame options={options} navigation={navigation} />
         </Box>
         <GoBack navigation={navigation} />
       </Stack>

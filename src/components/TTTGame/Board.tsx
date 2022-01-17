@@ -9,28 +9,37 @@ import Board3by3Straight from "../../images/Board3by3Straight";
 const THREE = 3;
 
 interface IProps {
-  onPlay: (id: ICoord, i: number, j: number, boardResultMark: Mark) => void;
+  handleTurn: (id: ICoord, i: number, j: number, boardResultMark: Mark) => void;
   playerMark: Mark;
   isPlayable: boolean;
   playerWonMark: Mark;
   id: ICoord;
   isBoardDesignStraight: boolean;
+  navigation: any;
 }
 
 const Board = ({
-  onPlay,
+  handleTurn,
   playerMark,
   isPlayable,
   playerWonMark,
   id,
   isBoardDesignStraight,
+  navigation,
 }: IProps) => {
-  const initialBoard: Mark[][] = [
+  const getInitialBoard = (): Mark[][] => [
     ["", "", ""],
     ["", "", ""],
     ["", "", ""],
   ];
-  const [squares, setSquares] = useState(initialBoard);
+  const [squares, setSquares] = useState(getInitialBoard());
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      setSquares(getInitialBoard());
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const boardResultMark = (row: number, col: number): Mark => {
     /*
@@ -86,7 +95,7 @@ const Board = ({
     return markEnum.DRAW;
   };
 
-  const showValue = (/*boardNumber: number,*/ i: number, j: number) => {
+  const showValue = (i: number, j: number) => {
     if (playerWonMark || !isPlayable) return;
 
     const newSquares = squares.slice();
@@ -94,7 +103,7 @@ const Board = ({
     newSquares[i][j] = playerMark;
     setSquares(newSquares);
 
-    onPlay(id, i, j, boardResultMark(i, j));
+    handleTurn(id, i, j, boardResultMark(i, j));
   };
 
   const getLineColor = (): string => {

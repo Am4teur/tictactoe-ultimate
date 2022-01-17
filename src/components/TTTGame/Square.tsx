@@ -17,7 +17,7 @@ const Square = ({ value, showValue, i, j }: Props) => {
         w="full"
         h="full"
       >
-        {value !== "N" ? value : null}
+        {value}
       </Button>
     </Box>
   );
