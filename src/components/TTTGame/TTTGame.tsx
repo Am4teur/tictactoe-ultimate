@@ -42,9 +42,13 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
   const [boards, setBoards] = useState<BoardData[][]>(initBoards());
 
   const reset = () => {
-    setPlayer(options.pm as Mark);
     setBoards(initBoards());
   };
+
+  useEffect(() => {
+    setPlayer(options.pm as Mark);
+    console.log("exe");
+  }, [options]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
