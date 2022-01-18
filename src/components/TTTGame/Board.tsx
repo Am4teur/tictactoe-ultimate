@@ -15,7 +15,8 @@ interface IProps {
   playerWonMark: Mark;
   id: ICoord;
   isBoardDesignStraight: boolean;
-  navigation: any;
+  squares: Mark[][];
+  onSquarePress: (boardId: ICoord, i: number, j: number) => void;
 }
 
 const Board = ({
@@ -25,87 +26,9 @@ const Board = ({
   playerWonMark,
   id,
   isBoardDesignStraight,
-  navigation,
+  squares,
+  onSquarePress,
 }: IProps) => {
-  const getInitialBoard = (): Mark[][] => [
-    ["", "", ""],
-    ["", "", ""],
-    ["", "", ""],
-  ];
-  const [squares, setSquares] = useState(getInitialBoard());
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      setSquares(getInitialBoard());
-    });
-    return unsubscribe;
-  }, [navigation]);
-
-  const boardResultMark = (row: number, col: number): Mark => {
-    /*
-    returns winner Mark === 'O' || 'X', if there is a winner
-    returns markEnum.DRAW === 'D',      if there is a draw
-    returns markEnum.EMPTY === '' ,     if it its still playable 
-    */
-    for (var k = 0; k < THREE; k++) {
-      if (squares[row][k] === "" || squares[row][k] !== playerMark) {
-        break;
-      }
-    }
-    if (k === THREE) {
-      return playerMark;
-    }
-
-    for (var k = 0; k < THREE; k++) {
-      if (squares[k][col] === "" || squares[k][col] !== playerMark) {
-        break;
-      }
-    }
-    if (k === THREE) {
-      return playerMark;
-    }
-
-    for (var k = 0; k < THREE; k++) {
-      if (squares[k][k] === "" || squares[k][k] !== playerMark) {
-        break;
-      }
-    }
-    if (k === THREE) {
-      return playerMark;
-    }
-
-    for (var k = 0; k < THREE; k++) {
-      if (
-        squares[THREE - k - 1][k] === "" ||
-        squares[THREE - k - 1][k] !== playerMark
-      ) {
-        break;
-      }
-    }
-    if (k === THREE) {
-      return playerMark;
-    }
-
-    for (let row of squares) {
-      for (let mark of row) {
-        if (!mark) return markEnum.EMPTY;
-      }
-    }
-
-    return markEnum.DRAW;
-  };
-
-  const showValue = (i: number, j: number) => {
-    if (playerWonMark || !isPlayable) return;
-
-    const newSquares = squares.slice();
-    if (newSquares[i][j]) return;
-    newSquares[i][j] = playerMark;
-    setSquares(newSquares);
-
-    handleTurn(id, i, j, boardResultMark(i, j));
-  };
-
   const getLineColor = (): string => {
     return playerWonMark === "O"
       ? "#1a91ff" // darkBlue.400
@@ -146,7 +69,8 @@ const Board = ({
                 <Square
                   key={`${i} ${j}`}
                   value={v}
-                  showValue={showValue}
+                  onSquarePress={onSquarePress}
+                  boardId={id}
                   i={i}
                   j={j}
                 />
