@@ -23,7 +23,7 @@ interface BoardData {
 
 const TTTGame = ({ options, navigation }: TTTGameProps) => {
   const [playerMark, setPlayerMark] = useState<Mark>(options.pm as Mark);
-  const isPlayingAI = false;
+  const isPlayingAI = true;
 
   const getEmptySquares = (): Mark[][] => [
     ["", "", ""],
@@ -61,6 +61,9 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       reset();
+      if (options.ws === 1) {
+        randomAIPlaysFirst();
+      }
     });
     return unsubscribe;
   }, [navigation]);
@@ -75,27 +78,11 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     return playerMark === "O" ? "X" : "O";
   };
 
-  const handleTurn = (
-    boardId: ICoord,
+  const updatePlayableBoards = (
+    newBoards: BoardData[][],
     i: number,
-    j: number,
-    boardResultMark: Mark
+    j: number
   ) => {
-    const newBoards = boards.slice();
-
-    if (boardResultMark) {
-      newBoards[boardId.i][boardId.j].playerWonMark = boardResultMark;
-      if (board9x9ResultMark(boardId.i, boardId.j)) {
-        console.log(
-          `The Game finished, player
-          ${board9x9ResultMark(boardId.i, boardId.j)}
-          won`
-        );
-      }
-    }
-
-    setPlayerMark(nextPlayerMark());
-
     newBoards.map((row) => {
       row.map((v) => {
         return Object.assign(v, { isPlayable: false });
@@ -113,7 +100,43 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     } else {
       newBoards[i][j].isPlayable = true;
     }
-    setBoards(newBoards);
+
+    return newBoards;
+  };
+
+  const checkWinner = (
+    newBoards: BoardData[][],
+    boardId: ICoord,
+    i: number,
+    j: number
+  ) => {
+    const didWin = boardResultMark(boardId, i, j);
+    console.log("didWin", didWin);
+
+    if (didWin) {
+      newBoards[boardId.i][boardId.j].playerWonMark = didWin;
+      if (board9x9ResultMark(boardId.i, boardId.j)) {
+        console.log(
+          `The Game finished, player
+        ${board9x9ResultMark(boardId.i, boardId.j)}
+        won`
+        );
+      }
+    }
+  };
+
+  const handleTurn = (
+    newBoards: BoardData[][],
+    boardId: ICoord,
+    i: number,
+    j: number,
+    currentPlayerMark: Mark
+  ) => {
+    updateSquare(newBoards, boardId, i, j, currentPlayerMark);
+
+    checkWinner(newBoards, boardId, i, j);
+
+    updatePlayableBoards(newBoards, i, j);
   };
 
   const boardResultMark = (boardId: ICoord, row: number, col: number): Mark => {
@@ -123,6 +146,7 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     returns markEnum.EMPTY === '' ,     if it its still playable
     */
     const currentSquares = boards[boardId.i][boardId.j].squares;
+
     for (var k = 0; k < THREE; k++) {
       if (
         currentSquares[row][k] === "" ||
@@ -240,11 +264,11 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     return markEnum.DRAW;
   };
 
-  const randomPlayAI = () => {
-    // get playableSquares
-    // const playableSquares;
+  const randomAIPlaysFirst = () => {
+    let resetedBoards = initBoards();
+
     let playableSquares: { boardId: ICoord; j: number; i: number }[] = [];
-    boards.forEach((row) => {
+    resetedBoards.forEach((row) => {
       row.forEach((board) => {
         if (board.isPlayable && !board.playerWonMark) {
           board.squares.forEach((squareRow, i) => {
@@ -264,28 +288,66 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
 
     // play on that square
     if (randomSquare) {
+      console.log("in");
       updateSquare(
+        resetedBoards,
         randomSquare.boardId,
         randomSquare.i,
         randomSquare.j,
         nextPlayerMark()
       );
+      resetedBoards = updatePlayableBoards(
+        resetedBoards,
+        randomSquare.i,
+        randomSquare.j
+      );
+    }
+  };
+
+  const getPlayableSquares = (currentBoards: BoardData[][]) => {
+    let playableSquares: { boardId: ICoord; j: number; i: number }[] = [];
+
+    currentBoards.forEach((row) => {
+      row.forEach((board) => {
+        if (board.isPlayable && !board.playerWonMark) {
+          board.squares.forEach((squareRow, i) => {
+            squareRow.forEach((square, j) => {
+              if (!square) {
+                playableSquares.push({ boardId: board.boardId, i: i, j: j });
+              }
+            });
+          });
+        }
+      });
+    });
+
+    return playableSquares;
+  };
+  const randomPlayAI = (currentBoards: BoardData[][]) => {
+    const playableSquares = getPlayableSquares(currentBoards);
+
+    const randomSquare =
+      playableSquares[getRandomInt(0, playableSquares.length - 1)];
+
+    // play on that square
+    if (randomSquare) {
       handleTurn(
+        currentBoards,
         randomSquare.boardId,
         randomSquare.i,
         randomSquare.j,
-        boardResultMark(randomSquare.boardId, randomSquare.i, randomSquare.j)
+        nextPlayerMark()
       );
     }
   };
 
   const updateSquare = (
+    newBoards: BoardData[][],
     boardId: ICoord,
     i: number,
     j: number,
     currentPlayerMark: Mark
   ) => {
-    const newBoards = boards.slice();
     if (
       newBoards[boardId.i][boardId.j].playerWonMark ||
       !newBoards[boardId.i][boardId.j].isPlayable
@@ -294,17 +356,35 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
 
     if (newBoards[boardId.i][boardId.j].squares[i][j]) return;
     newBoards[boardId.i][boardId.j].squares[i][j] = currentPlayerMark;
-    setBoards(newBoards);
   };
 
   const onSquarePress = (boardId: ICoord, i: number, j: number) => {
-    updateSquare(boardId, i, j, playerMark);
+    // updateSquare    boards => boards
+    // handleTurn      boards => boards
+    // check if win           boards => _
+    // updatePlayableBoards   boards => boards
 
-    handleTurn(boardId, i, j, boardResultMark(boardId, i, j));
+    // if 1 vs AI => AI play    === 4 previous steps
+    // if 1 vs 1 => nextPlayerMark
+    // setPlayerMark()
+
+    // setBoards()
+
+    // consideration:
+    // reset que setBoards
+    // AI plays first
+
+    let newBoards = boards.slice();
+
+    handleTurn(newBoards, boardId, i, j, playerMark);
 
     if (isPlayingAI) {
-      randomPlayAI();
+      randomPlayAI(newBoards);
+    } else {
+      setPlayerMark(nextPlayerMark());
     }
+
+    setBoards(newBoards);
   };
 
   return (
@@ -333,13 +413,11 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
               {row.map((v) => (
                 <Board
                   key={v.key}
-                  handleTurn={handleTurn}
-                  playerMark={playerMark}
+                  id={v.boardId}
+                  squares={v.squares}
                   isPlayable={v.isPlayable}
                   playerWonMark={v.playerWonMark}
-                  id={v.boardId}
                   isBoardDesignStraight={options.bd === 0}
-                  squares={v.squares}
                   onSquarePress={onSquarePress}
                 />
               ))}

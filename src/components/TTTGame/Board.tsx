@@ -9,8 +9,6 @@ import Board3by3Straight from "../../images/Board3by3Straight";
 const THREE = 3;
 
 interface IProps {
-  handleTurn: (id: ICoord, i: number, j: number, boardResultMark: Mark) => void;
-  playerMark: Mark;
   isPlayable: boolean;
   playerWonMark: Mark;
   id: ICoord;
@@ -20,8 +18,6 @@ interface IProps {
 }
 
 const Board = ({
-  handleTurn,
-  playerMark,
   isPlayable,
   playerWonMark,
   id,
