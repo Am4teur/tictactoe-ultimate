@@ -62,7 +62,9 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     const unsubscribe = navigation.addListener("focus", () => {
       reset();
       if (options.ws === 1) {
-        randomAIPlaysFirst();
+        const newBoards = initBoards();
+        randomPlayAI(newBoards);
+        setBoards(newBoards);
       }
     });
     return unsubscribe;
@@ -108,17 +110,18 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     newBoards: BoardData[][],
     boardId: ICoord,
     i: number,
-    j: number
+    j: number,
+    currentPlayerMark: Mark
   ) => {
-    const didWin = boardResultMark(boardId, i, j);
+    const didWin = boardResultMark(boardId, i, j, currentPlayerMark);
     console.log("didWin", didWin);
 
     if (didWin) {
       newBoards[boardId.i][boardId.j].playerWonMark = didWin;
-      if (board9x9ResultMark(boardId.i, boardId.j)) {
+      if (board9x9ResultMark(boardId.i, boardId.j, currentPlayerMark)) {
         console.log(
           `The Game finished, player
-        ${board9x9ResultMark(boardId.i, boardId.j)}
+        ${board9x9ResultMark(boardId.i, boardId.j, currentPlayerMark)}
         won`
         );
       }
@@ -134,12 +137,17 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
   ) => {
     updateSquare(newBoards, boardId, i, j, currentPlayerMark);
 
-    checkWinner(newBoards, boardId, i, j);
+    checkWinner(newBoards, boardId, i, j, currentPlayerMark);
 
     updatePlayableBoards(newBoards, i, j);
   };
 
-  const boardResultMark = (boardId: ICoord, row: number, col: number): Mark => {
+  const boardResultMark = (
+    boardId: ICoord,
+    row: number,
+    col: number,
+    currentPlayerMark: Mark
+  ): Mark => {
     /*
     returns winner Mark === 'O' || 'X', if there is a winner
     returns markEnum.DRAW === 'D',      if there is a draw
@@ -150,46 +158,49 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     for (var k = 0; k < THREE; k++) {
       if (
         currentSquares[row][k] === "" ||
-        currentSquares[row][k] !== playerMark
+        currentSquares[row][k] !== currentPlayerMark
       ) {
         break;
       }
     }
     if (k === THREE) {
-      return playerMark;
+      return currentPlayerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
       if (
         currentSquares[k][col] === "" ||
-        currentSquares[k][col] !== playerMark
+        currentSquares[k][col] !== currentPlayerMark
       ) {
         break;
       }
     }
     if (k === THREE) {
-      return playerMark;
+      return currentPlayerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
-      if (currentSquares[k][k] === "" || currentSquares[k][k] !== playerMark) {
+      if (
+        currentSquares[k][k] === "" ||
+        currentSquares[k][k] !== currentPlayerMark
+      ) {
         break;
       }
     }
     if (k === THREE) {
-      return playerMark;
+      return currentPlayerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
       if (
         currentSquares[THREE - k - 1][k] === "" ||
-        currentSquares[THREE - k - 1][k] !== playerMark
+        currentSquares[THREE - k - 1][k] !== currentPlayerMark
       ) {
         break;
       }
     }
     if (k === THREE) {
-      return playerMark;
+      return currentPlayerMark;
     }
 
     for (let row of currentSquares) {
@@ -201,7 +212,11 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     return markEnum.DRAW;
   };
 
-  const board9x9ResultMark = (row: number, col: number): Mark => {
+  const board9x9ResultMark = (
+    row: number,
+    col: number,
+    currentPlayerMark: Mark
+  ): Mark => {
     /*
     returns winner Mark === 'O' || 'X', if there is a winner
     returns markEnum.DRAW === 'D',      if there is a draw
@@ -210,49 +225,49 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     for (var k = 0; k < THREE; k++) {
       if (
         boards[row][k].playerWonMark === "" ||
-        boards[row][k].playerWonMark !== playerMark
+        boards[row][k].playerWonMark !== currentPlayerMark
       ) {
         break;
       }
     }
     if (k === THREE) {
-      return playerMark;
+      return currentPlayerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
       if (
         boards[k][col].playerWonMark === "" ||
-        boards[k][col].playerWonMark !== playerMark
+        boards[k][col].playerWonMark !== currentPlayerMark
       ) {
         break;
       }
     }
     if (k === THREE) {
-      return playerMark;
+      return currentPlayerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
       if (
         boards[k][k].playerWonMark === "" ||
-        boards[k][k].playerWonMark !== playerMark
+        boards[k][k].playerWonMark !== currentPlayerMark
       ) {
         break;
       }
     }
     if (k === THREE) {
-      return playerMark;
+      return currentPlayerMark;
     }
 
     for (var k = 0; k < THREE; k++) {
       if (
         boards[THREE - k - 1][k].playerWonMark === "" ||
-        boards[THREE - k - 1][k].playerWonMark !== playerMark
+        boards[THREE - k - 1][k].playerWonMark !== currentPlayerMark
       ) {
         break;
       }
     }
     if (k === THREE) {
-      return playerMark;
+      return currentPlayerMark;
     }
 
     for (let row of boards) {
@@ -262,46 +277,6 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     }
 
     return markEnum.DRAW;
-  };
-
-  const randomAIPlaysFirst = () => {
-    let resetedBoards = initBoards();
-
-    let playableSquares: { boardId: ICoord; j: number; i: number }[] = [];
-    resetedBoards.forEach((row) => {
-      row.forEach((board) => {
-        if (board.isPlayable && !board.playerWonMark) {
-          board.squares.forEach((squareRow, i) => {
-            squareRow.forEach((square, j) => {
-              if (!square) {
-                playableSquares.push({ boardId: board.boardId, i: i, j: j });
-              }
-            });
-          });
-        }
-      });
-    });
-
-    // get a random number between 0 to availableSquaresToPlay.length-1
-    const randomSquare =
-      playableSquares[getRandomInt(0, playableSquares.length - 1)];
-
-    // play on that square
-    if (randomSquare) {
-      console.log("in");
-      updateSquare(
-        resetedBoards,
-        randomSquare.boardId,
-        randomSquare.i,
-        randomSquare.j,
-        nextPlayerMark()
-      );
-      resetedBoards = updatePlayableBoards(
-        resetedBoards,
-        randomSquare.i,
-        randomSquare.j
-      );
-    }
   };
 
   const getPlayableSquares = (currentBoards: BoardData[][]) => {

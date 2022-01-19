@@ -19,17 +19,17 @@ interface MainScreenArgs {
   navigation: any;
 }
 
-const MainScreen = ({ navigation: { navigate } }: MainScreenArgs) => {
+const MainScreen = ({ navigation }: MainScreenArgs) => {
   const goToSingleplayerOptionsScreen = () => {
-    navigate("SingleplayerOptions");
+    navigation.navigate("SingleplayerOptions");
   };
 
   const goToMultiplayerScreen = () => {
-    navigate("Multiplayer");
+    navigation.navigate("Multiplayer");
   };
 
   const goToSettingsScreen = () => {
-    navigate("Settings");
+    navigation.navigate("Settings");
   };
 
   return (
