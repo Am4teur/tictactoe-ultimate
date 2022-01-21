@@ -23,7 +23,8 @@ interface BoardData {
 
 const TTTGame = ({ options, navigation }: TTTGameProps) => {
   const [playerMark, setPlayerMark] = useState<Mark>(options.pm as Mark);
-  const isPlayingAI = true;
+  const isPlayingAI = false;
+  const [winner, setWinner] = useState("");
 
   const getEmptySquares = (): Mark[][] => [
     ["", "", ""],
@@ -114,16 +115,17 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     currentPlayerMark: Mark
   ) => {
     const didWin = boardResultMark(boardId, i, j, currentPlayerMark);
-    console.log("didWin", didWin);
 
     if (didWin) {
       newBoards[boardId.i][boardId.j].playerWonMark = didWin;
-      if (board9x9ResultMark(boardId.i, boardId.j, currentPlayerMark)) {
-        console.log(
-          `The Game finished, player
-        ${board9x9ResultMark(boardId.i, boardId.j, currentPlayerMark)}
-        won`
-        );
+      const winner9x9 = board9x9ResultMark(
+        boardId.i,
+        boardId.j,
+        currentPlayerMark
+      );
+      if (winner9x9) {
+        console.log(`The Game finished, player ${winner9x9} won`);
+        setWinner(winner9x9);
       }
     }
   };
@@ -362,25 +364,25 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     setBoards(newBoards);
   };
 
+  const getLineColor = (): string => {
+    return winner === "O"
+      ? "#1a91ff" // => darkBlue.400
+      : winner === "X"
+      ? "#f97316" // => orange.500 OR #dc2626 => red.600
+      : winner === markEnum.DRAW
+      ? "#737373" // => trueGray.500
+      : "#000";
+  };
+
   return (
     <>
       <VStack>
         <Center>
-          <Box
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-            h="100%"
-            w="100%"
-          >
+          <Box position="absolute" h="100%" w="100%">
             {options.bd === 0 ? (
-              <Board3by3Straight lineColor={"#000"} small={false} />
+              <Board3by3Straight lineColor={getLineColor()} small={false} />
             ) : (
-              <Board3by3 lineColor={"#000"} />
+              <Board3by3 lineColor={getLineColor()} />
             )}
           </Box>
           {boards.map((row, i) => (

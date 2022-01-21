@@ -27,31 +27,21 @@ const Board = ({
 }: IProps) => {
   const getLineColor = (): string => {
     return playerWonMark === "O"
-      ? "#1a91ff" // darkBlue.400
+      ? "#1a91ff" // => darkBlue.400
       : playerWonMark === "X"
-      ? "#dc2626" // red.600
+      ? "#f97316" // => orange.500 OR #dc2626 => red.600
       : playerWonMark === markEnum.DRAW
-      ? "#737373" // trueGray.500
+      ? "#737373" // => trueGray.500
       : isPlayable
-      ? "#22c55e" // green.500
+      ? "#22c55e" // => green.500
       : "#000";
   };
 
   return (
     <>
-      <VStack>
+      <VStack my="3" mx="3">
         <Center>
-          <Box
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-            h="100%"
-            w="100%"
-          >
+          <Box position="absolute" h="100%" w="100%">
             {/* https://docs.nativebase.io/default-theme */}
             {isBoardDesignStraight ? (
               <Board3by3Straight lineColor={getLineColor()} small={true} />
