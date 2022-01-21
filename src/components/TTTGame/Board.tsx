@@ -1,5 +1,5 @@
-import { Button, Box, Row, HStack, VStack, Text, Center } from "native-base";
-import React, { useState, useEffect } from "react";
+import { Box, HStack, VStack, Center } from "native-base";
+import React from "react";
 import Square from "./Square";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
@@ -26,6 +26,7 @@ const Board = ({
   onSquarePress,
 }: IProps) => {
   const getLineColor = (): string => {
+    // https://docs.nativebase.io/default-theme
     return playerWonMark === "O"
       ? "#1a91ff" // => darkBlue.400
       : playerWonMark === "X"
@@ -42,7 +43,6 @@ const Board = ({
       <VStack my="3" mx="3">
         <Center>
           <Box position="absolute" h="100%" w="100%">
-            {/* https://docs.nativebase.io/default-theme */}
             {isBoardDesignStraight ? (
               <Board3by3Straight lineColor={getLineColor()} small={true} />
             ) : (

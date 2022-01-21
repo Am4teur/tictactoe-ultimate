@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Center, Button, Box, HStack, Text, VStack, View } from "native-base";
+import { Center, Box, HStack, VStack } from "native-base";
 import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
@@ -23,7 +23,7 @@ interface BoardData {
 
 const TTTGame = ({ options, navigation }: TTTGameProps) => {
   const [playerMark, setPlayerMark] = useState<Mark>(options.pm as Mark);
-  const isPlayingAI = false;
+  const isPlayingAI = true;
   const [winner, setWinner] = useState("");
 
   const getEmptySquares = (): Mark[][] => [

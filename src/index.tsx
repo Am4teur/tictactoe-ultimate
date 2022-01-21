@@ -14,10 +14,26 @@ const Stack = createNativeStackNavigator();
 const Router = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Main"
+      initialRouteName="Home"
       barStyle={{ backgroundColor: "#1a91ff" }}
     >
-      <Tab.Screen name="Main" component={MainScreen} />
+      <Tab.Screen
+        name="Home"
+        component={MainScreen}
+        options={{
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color }) => (
+            <Feather
+              name="home"
+              color="white"
+              size={24}
+              _dark={{
+                color: "warmGray.50",
+              }}
+            />
+          ),
+        }}
+      />
 
       <Tab.Screen
         name="Play"
@@ -27,7 +43,7 @@ const Router = () => {
             <Feather
               name="user"
               color="white"
-              size={26}
+              size={24}
               _dark={{
                 color: "warmGray.50",
               }}
@@ -55,7 +71,7 @@ const Router = () => {
             <Feather
               name="users"
               color="white"
-              size={26}
+              size={24}
               _dark={{
                 color: "warmGray.50",
               }}
@@ -73,7 +89,7 @@ const Router = () => {
             <Feather
               name="settings"
               color="white"
-              size={26}
+              size={24}
               _dark={{
                 color: "warmGray.50",
               }}

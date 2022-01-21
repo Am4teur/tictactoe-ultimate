@@ -1,17 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import {
-  Center,
-  VStack,
-  Text,
-  Flex,
-  Button,
-  Icon,
-  HStack,
-  Stack,
-  Heading,
-  ScrollView,
-} from "native-base";
+import { Text, Button, HStack, Stack, Heading } from "native-base";
 import { Feather } from "@expo/vector-icons";
 import ScreenWrapper from "../components/ScreenWrapper";
 
@@ -21,7 +10,9 @@ interface MainScreenArgs {
 
 const MainScreen = ({ navigation }: MainScreenArgs) => {
   const goToSingleplayerOptionsScreen = () => {
-    navigation.navigate("SingleplayerOptions");
+    navigation.navigate("Play", {
+      screen: "SingleplayerOptions",
+    });
   };
 
   const goToMultiplayerScreen = () => {
