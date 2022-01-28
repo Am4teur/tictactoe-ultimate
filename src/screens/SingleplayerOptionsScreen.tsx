@@ -134,7 +134,7 @@ const SingleplayerOptionsScreen = ({ navigation: { navigate } }: any) => {
             </Radio.Group>
           </Box>
         </Center>
-        <Button onPress={onSubmit} mt="5" colorScheme="cyan">
+        <Button onPress={onSubmit} mt="5">
           Start
         </Button>
       </FormControl>
