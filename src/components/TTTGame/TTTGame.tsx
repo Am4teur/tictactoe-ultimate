@@ -325,14 +325,14 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     j: number,
     currentPlayerMark: Mark
   ) => {
-    if (
-      newBoards[boardId.i][boardId.j].playerWonMark ||
-      !newBoards[boardId.i][boardId.j].isPlayable
-    )
-      return;
-
     if (newBoards[boardId.i][boardId.j].squares[i][j]) return;
     newBoards[boardId.i][boardId.j].squares[i][j] = currentPlayerMark;
+  };
+
+  const isBoardPlayable = (boardId: ICoord): boolean => {
+    const board = boards[boardId.i][boardId.j];
+    if (board.playerWonMark || !board.isPlayable) return false;
+    return true;
   };
 
   const onSquarePress = (boardId: ICoord, i: number, j: number) => {
@@ -350,6 +350,10 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
     // consideration:
     // reset que setBoards
     // AI plays first
+
+    if (!isBoardPlayable(boardId)) {
+      return;
+    }
 
     let newBoards = boards.slice();
 
