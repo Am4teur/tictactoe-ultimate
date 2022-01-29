@@ -5,6 +5,8 @@ import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
 import Board3by3 from "../../images/Board3by3";
 import Board3by3Straight from "../../images/Board3by3Straight";
+import DisplayWinner from "./DisplayWinner";
+import CurrentPlaying from "./CurrentPlaying";
 
 const THREE = 3;
 
@@ -23,8 +25,8 @@ interface BoardData {
 
 const TTTGame = ({ options, navigation }: TTTGameProps) => {
   const [playerMark, setPlayerMark] = useState<Mark>(options.pm as Mark);
-  const isPlayingAI = false;
-  const winner = useRef("");
+  const isPlayingAI = true;
+  const winner = useRef<Mark>("");
 
   const getEmptySquares = (): Mark[][] => [
     ["", "", ""],
@@ -378,9 +380,20 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
       : "#000";
   };
 
+  const getPlayerColor = (): string => {
+    // https://docs.nativebase.io/default-theme
+    return playerMark === "O"
+      ? "#1a91ff" // => darkBlue.400
+      : "#f97316"; // => orange.500 OR #dc2626 => red.600
+  };
+
   return (
     <>
       <VStack>
+        {!isPlayingAI ? (
+          <CurrentPlaying playerMark={playerMark} color={getPlayerColor()} />
+        ) : null}
+
         <Center>
           <Box position="absolute" h="100%" w="100%">
             {options.bd === 0 ? (
@@ -405,7 +418,10 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
             </HStack>
           ))}
         </Center>
-        {winner.current && <Text>player {winner.current} has won</Text>}
+
+        {winner.current ? (
+          <DisplayWinner winner={winner.current} color={getPlayerColor()} />
+        ) : null}
       </VStack>
     </>
   );
