@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Center, Box, HStack, VStack } from "native-base";
+import React, { useState, useEffect, useRef } from "react";
+import { Center, Box, HStack, VStack, Text } from "native-base";
 import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
@@ -23,8 +23,8 @@ interface BoardData {
 
 const TTTGame = ({ options, navigation }: TTTGameProps) => {
   const [playerMark, setPlayerMark] = useState<Mark>(options.pm as Mark);
-  const isPlayingAI = true;
-  const [winner, setWinner] = useState("");
+  const isPlayingAI = false;
+  const winner = useRef("");
 
   const getEmptySquares = (): Mark[][] => [
     ["", "", ""],
@@ -125,7 +125,7 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
       );
       if (winner9x9) {
         console.log(`The Game finished, player ${winner9x9} won`);
-        setWinner(winner9x9);
+        winner.current = winner9x9;
       }
     }
   };
@@ -359,7 +359,7 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
 
     handleTurn(newBoards, boardId, i, j, playerMark);
 
-    if (isPlayingAI) {
+    if (isPlayingAI && !winner.current) {
       randomPlayAI(newBoards);
     } else {
       setPlayerMark(nextPlayerMark());
@@ -369,11 +369,11 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
   };
 
   const getLineColor = (): string => {
-    return winner === "O"
+    return winner.current === "O"
       ? "#1a91ff" // => darkBlue.400
-      : winner === "X"
+      : winner.current === "X"
       ? "#f97316" // => orange.500 OR #dc2626 => red.600
-      : winner === markEnum.DRAW
+      : winner.current === markEnum.DRAW
       ? "#737373" // => trueGray.500
       : "#000";
   };
@@ -405,6 +405,7 @@ const TTTGame = ({ options, navigation }: TTTGameProps) => {
             </HStack>
           ))}
         </Center>
+        {winner.current && <Text>player {winner.current} has won</Text>}
       </VStack>
     </>
   );
