@@ -1,15 +1,73 @@
-import React, { memo } from "react";
-import Svg, { SvgProps, Path } from "react-native-svg";
+import React, { memo, useEffect, useRef } from "react";
+import Svg, { SvgProps, Circle } from "react-native-svg";
+import { Animated, Easing } from "react-native";
 
-const CircleMark = ({ stroke }: SvgProps) => (
-  <Svg width="100%" height="100%" viewBox="0 0 300 300">
-    <Path
-      d="M240 150c0 51.362-39.19 90-90 90s-90-38.638-90-90 39.19-90 90-90 90 38.638 90 90z"
-      stroke={stroke}
-      strokeWidth={30}
-    />
-  </Svg>
-);
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+
+interface CircleMarkProps extends SvgProps {
+  playedByAI?: boolean;
+}
+
+const CircleMark = ({ stroke, playedByAI }: CircleMarkProps) => {
+  const circleRef = useRef<typeof AnimatedCircle>(null);
+
+  const radius = 90; // 300/2 - line strokeWidth === 150 - 40 === 90;
+  const length = 2 * Math.PI * radius;
+
+  const percentage = 100;
+  const duration = 400;
+  const delayAI = playedByAI ? duration : 0;
+
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const animation = (toValue: any, delay: number) => {
+    return Animated.timing(animatedValue, {
+      delay,
+      toValue,
+      duration,
+      useNativeDriver: true,
+      easing: Easing.out(Easing.ease),
+    }).start();
+  };
+
+  useEffect(() => {
+    animation(percentage, delayAI);
+    animatedValue.addListener(
+      (v) => {
+        const strokeDashoffset = length - (length * v.value) / 100;
+
+        if (circleRef?.current) {
+          // @ts-ignore
+          circleRef.current.setNativeProps({
+            strokeDashoffset,
+          });
+        }
+      },
+      // @ts-ignore
+      [percentage]
+    );
+
+    return () => {
+      animatedValue.removeAllListeners();
+    };
+  }, []);
+
+  return (
+    <Svg width="100%" height="100%" viewBox="0 0 300 300">
+      <AnimatedCircle
+        ref={circleRef}
+        cx="50%"
+        cy="50%"
+        r={radius}
+        fill="transparent"
+        stroke={stroke}
+        strokeWidth={40}
+        strokeLinejoin="round"
+        strokeDasharray={length}
+        strokeDashoffset={length}
+      />
+    </Svg>
+  );
+};
 
 const Memo = memo(CircleMark);
 export default Memo;
