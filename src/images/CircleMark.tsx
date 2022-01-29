@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useRef } from "react";
-import Svg, { SvgProps, Circle } from "react-native-svg";
+import Svg, { SvgProps, Circle, G } from "react-native-svg";
 import { Animated, Easing } from "react-native";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -51,20 +51,24 @@ const CircleMark = ({ stroke, playedByAI }: CircleMarkProps) => {
     };
   }, []);
 
+  const halfCircle = radius + 60;
+
   return (
     <Svg width="100%" height="100%" viewBox="0 0 300 300">
-      <AnimatedCircle
-        ref={circleRef}
-        cx="50%"
-        cy="50%"
-        r={radius}
-        fill="transparent"
-        stroke={stroke}
-        strokeWidth={40}
-        strokeLinejoin="round"
-        strokeDasharray={length}
-        strokeDashoffset={length}
-      />
+      <G rotation="-90" origin={`${halfCircle}, ${halfCircle}`}>
+        <AnimatedCircle
+          ref={circleRef}
+          cx="50%"
+          cy="50%"
+          r={radius}
+          fill="transparent"
+          stroke={stroke}
+          strokeWidth={40}
+          strokeLinejoin="round"
+          strokeDasharray={length}
+          strokeDashoffset={length}
+        />
+      </G>
     </Svg>
   );
 };
