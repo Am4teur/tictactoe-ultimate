@@ -5,6 +5,10 @@ import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
 import Board3by3 from "../../images/Board3by3";
 import Board3by3Straight from "../../images/Board3by3Straight";
+import CircleMark from "../../images/CircleMark";
+import CrossMark from "../../images/CrossMark";
+import DrawMark from "../../images/DrawMark";
+import { SquareData } from "./TTTGame";
 
 const THREE = 3;
 
@@ -13,7 +17,7 @@ interface IProps {
   playerWonMark: Mark;
   id: ICoord;
   isBoardDesignStraight: boolean;
-  squares: Mark[][];
+  squares: SquareData[][];
   onSquarePress: (boardId: ICoord, i: number, j: number) => void;
 }
 
@@ -49,12 +53,27 @@ const Board = ({
               <Board3by3 lineColor={getLineColor()} />
             )}
           </Box>
+          <Box
+            position="absolute"
+            h="100%"
+            w="100%"
+            zIndex={playerWonMark ? 1 : -1}
+          >
+            {playerWonMark === "O" ? (
+              <CircleMark stroke="#1a91ff" onTopOf3x3 />
+            ) : playerWonMark === "X" ? (
+              <CrossMark stroke="#f97316" onTopOf3x3 playedByAI />
+            ) : playerWonMark === markEnum.DRAW ? (
+              <DrawMark stroke="#737373" />
+            ) : null}
+          </Box>
           {squares.map((row, i) => (
             <HStack key={i}>
               {row.map((v, j) => (
                 <Square
                   key={`${i} ${j}`}
-                  value={v}
+                  value={v.mark}
+                  isAI={v.isAI}
                   onSquarePress={onSquarePress}
                   boardId={id}
                   i={i}

@@ -7,9 +7,10 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 interface CrossMarkProps extends SvgProps {
   playedByAI?: boolean;
+  onTopOf3x3?: boolean;
 }
 
-const CrossMark = ({ stroke, playedByAI }: CrossMarkProps) => {
+const CrossMark = ({ stroke, playedByAI, onTopOf3x3 }: CrossMarkProps) => {
   const crossRef1 = useRef<typeof AnimatedPath>(null);
   const crossRef2 = useRef<typeof AnimatedPath>(null);
 
@@ -73,6 +74,8 @@ const CrossMark = ({ stroke, playedByAI }: CrossMarkProps) => {
 
   return (
     <Svg width="100%" height="100%" viewBox="0 0 300 300">
+      {onTopOf3x3 && <Path fill="#fff" d="M0 0H300V300H0z" fillOpacity="0.6" />}
+
       <AnimatedPath
         // @ts-ignore
         ref={crossRef1}
@@ -93,7 +96,6 @@ const CrossMark = ({ stroke, playedByAI }: CrossMarkProps) => {
         strokeDasharray={length}
         strokeDashoffset={length}
       />
-      {/* separate the strokes in diff paths */}
     </Svg>
   );
 };

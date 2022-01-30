@@ -2,8 +2,9 @@ import React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MainScreen from "./screens/MainScreen";
-import SingleplayerScreen from "./screens/SingleplayerScreen";
-import SingleplayerOptionsScreen from "./screens/SingleplayerOptionsScreen";
+import SingleplayerScreen from "./screens/Singleplayer/SingleplayerScreen";
+import SingleplayerOptionsScreen from "./screens/Singleplayer/SingleplayerOptionsScreen";
+import SingleplayerWinnerScreen from "./screens/Singleplayer/SingleplayerWinnerScreen";
 import MultiplayerScreen from "./screens/MultiplayerScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import { Feather } from "@expo/vector-icons";
@@ -58,6 +59,10 @@ const Router = () => {
               component={SingleplayerOptionsScreen}
             />
             <Stack.Screen name="Singleplayer" component={SingleplayerScreen} />
+            <Stack.Screen
+              name="SingleplayerWinner"
+              component={SingleplayerWinnerScreen}
+            />
           </Stack.Navigator>
         )}
       </Tab.Screen>

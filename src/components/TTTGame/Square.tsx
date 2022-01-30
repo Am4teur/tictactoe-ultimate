@@ -9,14 +9,15 @@ type Props = {
   boardId: ICoord;
   i: number;
   j: number;
+  isAI: boolean;
 };
 
-const Square = ({ value, onSquarePress, boardId, i, j }: Props) => {
+const Square = ({ value, onSquarePress, boardId, i, j, isAI }: Props) => {
   return (
     <Box w="8" h="8">
-      {value === "O" && <CircleMark stroke="#1a91ff" />}
+      {value === "O" && <CircleMark stroke="#1a91ff" playedByAI={isAI} />}
       {/* #1a91ff => darkBlue.400 */}
-      {value === "X" && <CrossMark stroke="#f97316" playedByAI />}
+      {value === "X" && <CrossMark stroke="#f97316" playedByAI={isAI} />}
       {/* #f97316 => orange.500 */}
       {/* OR #dc2626 => red.600 */}
       <Button

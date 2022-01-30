@@ -1,7 +1,9 @@
+import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
 import { Text, Button, HStack, Stack, Heading } from "native-base";
 import { Feather } from "@expo/vector-icons";
+import { CommonActions } from "@react-navigation/native";
+
 import ScreenWrapper from "../components/ScreenWrapper";
 
 interface MainScreenArgs {
@@ -9,6 +11,21 @@ interface MainScreenArgs {
 }
 
 const MainScreen = ({ navigation }: MainScreenArgs) => {
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("tabPress", (e: any) => {
+      e.preventDefault();
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Home" }],
+        })
+      );
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   const goToSingleplayerOptionsScreen = () => {
     navigation.navigate("Play", {
       screen: "SingleplayerOptions",
