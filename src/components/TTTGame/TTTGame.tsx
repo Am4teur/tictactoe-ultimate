@@ -3,7 +3,7 @@ import { Center, Box, HStack, VStack, Text } from "native-base";
 import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
-import Board3by3 from "../../images/Board3by3";
+import Board3by3Drawish from "../../images/Board3by3Drawish";
 import Board3by3Straight from "../../images/Board3by3Straight";
 import CurrentPlaying from "./CurrentPlaying";
 
@@ -416,9 +416,9 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
         <Center>
           <Box position="absolute" h="100%" w="100%">
             {options.bd === 0 ? (
-              <Board3by3Straight lineColor={getLineColor()} small={false} />
+              <Board3by3Straight stroke={getLineColor()} />
             ) : (
-              <Board3by3 lineColor={getLineColor()} />
+              <Board3by3Drawish stroke={getLineColor()} />
             )}
           </Box>
           {boards.map((row, i) => (

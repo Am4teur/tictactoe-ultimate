@@ -3,7 +3,7 @@ import React from "react";
 import Square from "./Square";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
-import Board3by3 from "../../images/Board3by3";
+import Board3by3Drawish from "../../images/Board3by3Drawish";
 import Board3by3Straight from "../../images/Board3by3Straight";
 import CircleMark from "../../images/CircleMark";
 import CrossMark from "../../images/CrossMark";
@@ -48,9 +48,9 @@ const Board = ({
         <Center>
           <Box position="absolute" h="100%" w="100%">
             {isBoardDesignStraight ? (
-              <Board3by3Straight lineColor={getLineColor()} small={true} />
+              <Board3by3Straight stroke={getLineColor()} />
             ) : (
-              <Board3by3 lineColor={getLineColor()} />
+              <Board3by3Drawish stroke={getLineColor()} />
             )}
           </Box>
           <Box
