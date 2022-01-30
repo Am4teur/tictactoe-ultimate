@@ -1,6 +1,8 @@
 import { Box, Heading, Stack } from "native-base";
 import React from "react";
 import ScreenWrapper from "../../components/ScreenWrapper";
+import DisplayWinner from "../../components/TTTGame/DisplayWinner";
+import { getPlayerColor } from "../../components/TTTGame/TTTGame";
 
 interface SingleplayerWinnerProps {
   navigation: any;
@@ -13,8 +15,11 @@ const SingleplayerWinner = ({ navigation, route }: SingleplayerWinnerProps) => {
   return (
     <ScreenWrapper>
       <Stack alignItems="center">
-        <Heading>Singlepayer Winner Screen {winner}</Heading>
-        <Box flex={1} justifyContent="center"></Box>
+        <Box flex={1} justifyContent="center">
+          {winner ? (
+            <DisplayWinner winner={winner} color={getPlayerColor(winner)} />
+          ) : null}
+        </Box>
       </Stack>
     </ScreenWrapper>
   );

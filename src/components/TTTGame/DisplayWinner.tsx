@@ -20,7 +20,7 @@ const DisplayWinner = ({ winner, color }: DisplayWinnerProps) => (
       )}
       {winner === "X" && (
         <Box w="10" h="10">
-          <CrossMark stroke="#f97316" playedByAI />
+          <CrossMark stroke="#f97316" />
         </Box>
       )}{" "}
       Won!

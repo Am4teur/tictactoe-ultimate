@@ -5,7 +5,6 @@ import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
 import Board3by3 from "../../images/Board3by3";
 import Board3by3Straight from "../../images/Board3by3Straight";
-import DisplayWinner from "./DisplayWinner";
 import CurrentPlaying from "./CurrentPlaying";
 
 const THREE = 3;
@@ -28,7 +27,14 @@ interface BoardData {
   squares: SquareData[][];
 }
 
-export const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
+export const getPlayerColor = (mark: Mark): string => {
+  // https://docs.nativebase.io/default-theme
+  return mark === "O"
+    ? "#1a91ff" // => darkBlue.400
+    : "#f97316"; // => orange.500 OR #dc2626 => red.600
+};
+
+const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
   const [playerMark, setPlayerMark] = useState<Mark>(options.pm as Mark);
   const isPlayingAI = false;
   const winner = useRef<Mark>("");
@@ -397,13 +403,6 @@ export const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
       : "#000";
   };
 
-  const getPlayerColor = (mark: Mark): string => {
-    // https://docs.nativebase.io/default-theme
-    return mark === "O"
-      ? "#1a91ff" // => darkBlue.400
-      : "#f97316"; // => orange.500 OR #dc2626 => red.600
-  };
-
   return (
     <>
       <VStack>
@@ -438,13 +437,6 @@ export const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
             </HStack>
           ))}
         </Center>
-
-        {winner.current ? (
-          <DisplayWinner
-            winner={winner.current}
-            color={getPlayerColor(winner.current)}
-          />
-        ) : null}
       </VStack>
     </>
   );
