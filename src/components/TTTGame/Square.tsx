@@ -1,7 +1,7 @@
 import { Box, Button } from "native-base";
 import { ICoord } from "../../types/ICoord";
-import CircleMark from "../../images/CircleMark";
-import CrossMark from "../../images/CrossMark";
+import CircleMark from "../../images/Mark/CircleMark";
+import CrossMark from "../../images/Mark/CrossMark";
 
 type Props = {
   value: string;

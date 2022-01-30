@@ -3,8 +3,8 @@ import { Center, Box, HStack, VStack, Text } from "native-base";
 import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
-import Board3by3Drawish from "../../images/Board3by3Drawish";
-import Board3by3Straight from "../../images/Board3by3Straight";
+import Board3by3Drawish from "../../images/Board/Board3by3Drawish";
+import Board3by3Straight from "../../images/Board/Board3by3Straight";
 import CurrentPlaying from "./CurrentPlaying";
 
 const THREE = 3;

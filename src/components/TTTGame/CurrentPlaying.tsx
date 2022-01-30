@@ -1,8 +1,8 @@
 import React from "react";
 import { Center, Text, Box } from "native-base";
 import { Mark } from "../../types/Mark";
-import CircleMark from "../../images/CircleMark";
-import CrossMark from "../../images/CrossMark";
+import CircleMark from "../../images/Mark/CircleMark";
+import CrossMark from "../../images/Mark/CrossMark";
 
 interface CurrentPlayingProps {
   playerMark: Mark;

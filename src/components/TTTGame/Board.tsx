@@ -3,11 +3,11 @@ import React from "react";
 import Square from "./Square";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
-import Board3by3Drawish from "../../images/Board3by3Drawish";
-import Board3by3Straight from "../../images/Board3by3Straight";
-import CircleMark from "../../images/CircleMark";
-import CrossMark from "../../images/CrossMark";
-import DrawMark from "../../images/DrawMark";
+import Board3by3Drawish from "../../images/Board/Board3by3Drawish";
+import Board3by3Straight from "../../images/Board/Board3by3Straight";
+import CircleMark from "../../images/Mark/CircleMark";
+import CrossMark from "../../images/Mark/CrossMark";
+import DrawMark from "../../images/Mark/DrawMark";
 import { SquareData } from "./TTTGame";
 
 const THREE = 3;
