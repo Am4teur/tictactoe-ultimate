@@ -43,9 +43,9 @@ npm install \
 -> react-native-paper                       (navigation material bottom bar)
 -> react-native-vector-icons                (navigation material bottom bar)
 -> @react-navigation/native-stack           (basic navigation stack)
+-> moti \                                   (Similar to react motion, just trying it out)
 ~ styled-components \
 ? styled-system \
-moti \
 shortid \
 @types/shortid \
 expo-linking \
