@@ -9,8 +9,10 @@ import CurrentPlaying from "./CurrentPlaying";
 
 const THREE = 3;
 
+const optionsPlayerMarkEnum = ["O" as Mark, "X" as Mark];
+
 interface TTTGameProps {
-  options: { ws: number; pm: string; bd: number };
+  options: { startMark: number; playerMark: number; boardDesign: number };
   navToWinnerScreen: (winnerMark: Mark) => void;
 }
 
@@ -35,7 +37,9 @@ export const getPlayerColor = (mark: Mark): string => {
 };
 
 const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
-  const [playerMark, setPlayerMark] = useState<Mark>(options.pm as Mark);
+  const [playerMark, setPlayerMark] = useState<Mark>(
+    optionsPlayerMarkEnum[options.playerMark]
+  );
   const isPlayingAI = false;
   const winner = useRef<Mark>("");
 
@@ -77,7 +81,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
   const [boards, setBoards] = useState<BoardData[][]>(initBoards());
 
   useEffect(() => {
-    if (options.ws === 1) {
+    if (options.startMark === 1) {
       const newBoards = boards.slice();
       randomPlayAI(newBoards);
       setBoards(newBoards);
@@ -348,7 +352,6 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
   ) => {
     const squareToUpdate = newBoards[boardId.i][boardId.j].squares[i][j];
     if (squareToUpdate.mark) return;
-    console.log(squareToUpdate);
 
     squareToUpdate.mark = currentPlayerMark;
     squareToUpdate.isAI = isAI;
@@ -415,7 +418,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
 
         <Center>
           <Box position="absolute" h="100%" w="100%">
-            {options.bd === 0 ? (
+            {options.boardDesign === 0 ? (
               <Board3by3Straight stroke={getLineColor()} />
             ) : (
               <Board3by3Drawish stroke={getLineColor()} />
@@ -430,7 +433,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
                   squares={v.squares}
                   isPlayable={v.isPlayable}
                   playerWonMark={v.playerWonMark}
-                  isBoardDesignStraight={options.bd === 0}
+                  isBoardDesignStraight={options.boardDesign === 0}
                   onSquarePress={onSquarePress}
                 />
               ))}
