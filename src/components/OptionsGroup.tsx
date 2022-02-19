@@ -21,12 +21,12 @@ const OptionsGroup = ({
   secondImage,
 }: OptionsGroupProps) => {
   const animationState1 = useAnimationState({
-    highlighted: { borderColor: "blue.500", scale: 1.2 },
-    notH: { borderColor: "gray.500", scale: 1 },
+    highlighted: { borderColor: "blue.500", scale: 1.2, opacity: 1 },
+    notH: { borderColor: "gray.500", scale: 1, opacity: 0.5 },
   });
   const animationState2 = useAnimationState({
-    highlighted: { borderColor: "blue.500", scale: 1.2 },
-    notH: { borderColor: "gray.500", scale: 1 },
+    highlighted: { borderColor: "blue.500", scale: 1.2, opacity: 1 },
+    notH: { borderColor: "gray.500", scale: 1, opacity: 0.5 },
   });
 
   const animationPress = () => {
@@ -44,10 +44,17 @@ const OptionsGroup = ({
   }, [pressed]);
 
   return (
-    <Center>
+    <Center mb="4">
       <Heading>{heading}</Heading>
       <Flex direction="row" my={4}>
-        <MotiPressable onPress={() => handlePress(0)} state={animationState1}>
+        <MotiPressable
+          onPress={() => handlePress(0)}
+          state={animationState1}
+          transition={{
+            type: "timing",
+            duration: 150,
+          }}
+        >
           <Box
             h={16}
             w={16}
@@ -63,7 +70,14 @@ const OptionsGroup = ({
             </Stack>
           </Box>
         </MotiPressable>
-        <MotiPressable onPress={() => handlePress(1)} state={animationState2}>
+        <MotiPressable
+          onPress={() => handlePress(1)}
+          state={animationState2}
+          transition={{
+            type: "timing",
+            duration: 150,
+          }}
+        >
           <Box
             h={16}
             w={16}
