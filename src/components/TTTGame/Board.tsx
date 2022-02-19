@@ -1,4 +1,4 @@
-import { Box, HStack, VStack, Center } from "native-base";
+import { Box, HStack, VStack, Center, useColorModeValue } from "native-base";
 import React from "react";
 import Square from "./Square";
 import { Mark, markEnum } from "../../types/Mark";
@@ -29,7 +29,7 @@ const Board = ({
   squares,
   onSquarePress,
 }: IProps) => {
-  const getLineColor = (): string => {
+  const getLineColor = (): any => {
     // https://docs.nativebase.io/default-theme
     return playerWonMark === "O"
       ? "#1a91ff" // => darkBlue.400
@@ -39,7 +39,7 @@ const Board = ({
       ? "#737373" // => trueGray.500
       : isPlayable
       ? "#22c55e" // => green.500
-      : "#000";
+      : useColorModeValue("#000", "#fff");
   };
 
   return (

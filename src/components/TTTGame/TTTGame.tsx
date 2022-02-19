@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Center, Box, HStack, VStack, Text } from "native-base";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Center, Box, HStack, VStack, useColorModeValue } from "native-base";
 import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
 import { ICoord } from "../../types/ICoord";
@@ -40,7 +40,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
   const [playerMark, setPlayerMark] = useState<Mark>(
     optionsPlayerMarkEnum[options.playerMark]
   );
-  const isPlayingAI = false;
+  const isPlayingAI = true;
   const winner = useRef<Mark>("");
 
   const getEmptySquares = (): SquareData[][] => [
@@ -363,7 +363,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
     return true;
   };
 
-  const onSquarePress = (boardId: ICoord, i: number, j: number) => {
+  const onSquarePress = useCallback((boardId: ICoord, i: number, j: number) => {
     // updateSquare    boards => boards
     // handleTurn      boards => boards
     // check if win           boards => _
@@ -394,7 +394,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
     }
 
     setBoards(newBoards);
-  };
+  }, []);
 
   const getLineColor = (): string => {
     return winner.current === "O"
@@ -403,7 +403,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
       ? "#f97316" // => orange.500 OR #dc2626 => red.600
       : winner.current === markEnum.DRAW
       ? "#737373" // => trueGray.500
-      : "#000";
+      : useColorModeValue("#000", "#fff");
   };
 
   return (

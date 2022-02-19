@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Button } from "native-base";
 import { ICoord } from "../../types/ICoord";
 import CircleMark from "../../images/Mark/CircleMark";
@@ -31,4 +32,4 @@ const Square = ({ value, onSquarePress, boardId, i, j, isAI }: Props) => {
   );
 };
 
-export default Square;
+export default React.memo(Square);
