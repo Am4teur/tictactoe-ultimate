@@ -36,10 +36,10 @@ const MainScreen = ({ navigation }: MainScreenArgs) => {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: "Multiplayer" }],
+        routes: [{ name: "MultiplayerTab" }],
       })
     );
-    navigation.navigate("Multiplayer");
+    navigation.navigate("MultiplayerTab");
   };
 
   const goToSettingsScreen = () => {

@@ -8,7 +8,7 @@ const SettingsScreen = ({ navigation }: any) => {
   return (
     <ScreenWrapper>
       <Stack alignItems="center">
-        <Heading my="4">Settings Screen</Heading>
+        <Heading my="4">Settings</Heading>
         <Box flex={1} justifyContent="center">
           <Box py="5">
             <ThemeToggle />
