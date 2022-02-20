@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "tictactoe-ultimate",
+    "name": "Ultimate Tic Tac Toe",
     "slug": "tictactoe-ultimate",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -13,13 +13,13 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "dc.tictactoe_ultimate",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

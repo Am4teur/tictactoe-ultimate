@@ -58,6 +58,7 @@ const Router = () => {
             <Stack.Navigator>
               <Stack.Screen
                 name="SingleplayerOptions"
+                options={{ title: "Options" }}
                 component={SingleplayerOptionsScreen}
               />
               <Stack.Screen
@@ -70,12 +71,12 @@ const Router = () => {
         </Tab.Screen>
 
         <Tab.Screen
-          name="Multiplayer"
+          name="MultiplayerTab"
           listeners={({ navigation }) => ({
             tabPress: () => {
               const resetAction = CommonActions.reset({
                 index: 0,
-                routes: [{ name: "MultiplayerScreen" }],
+                routes: [{ name: "MultiplayerTab" }],
               });
               navigation.dispatch(resetAction);
             },
@@ -96,10 +97,7 @@ const Router = () => {
         >
           {() => (
             <Stack.Navigator>
-              <Stack.Screen
-                name="MultiplayerScreen"
-                component={MultiplayerScreen}
-              />
+              <Stack.Screen name="Multiplayer" component={MultiplayerScreen} />
               <Stack.Screen name="WinnerScreen" component={WinnerScreen} />
             </Stack.Navigator>
           )}
