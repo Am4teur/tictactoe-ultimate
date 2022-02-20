@@ -33,6 +33,12 @@ const MainScreen = ({ navigation }: MainScreenArgs) => {
   };
 
   const goToMultiplayerScreen = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: "Multiplayer" }],
+      })
+    );
     navigation.navigate("Multiplayer");
   };
 

@@ -29,7 +29,12 @@ const SingleplayerOptionsScreen = ({ navigation: { navigate } }: any) => {
 
   const onSubmit = () => {
     // const options = convertOptions();
-    navigate("Singleplayer", { startMark, playerMark, boardDesign });
+    navigate("Singleplayer", {
+      startMark,
+      playerMark,
+      boardDesign,
+      playingVsAI: true,
+    });
   };
 
   const handlePressStartMark = (option: number) => {

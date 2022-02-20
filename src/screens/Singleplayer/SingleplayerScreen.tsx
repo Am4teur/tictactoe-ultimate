@@ -14,7 +14,7 @@ const SingleplayerScreen = ({ navigation, route }: SingleplayerProps) => {
   const options = route.params;
 
   const navigateToWinnerScreen = (winner: Mark) => {
-    navigation.navigate("SingleplayerWinner", { winner });
+    navigation.navigate("WinnerScreen", { winner });
   };
 
   return (

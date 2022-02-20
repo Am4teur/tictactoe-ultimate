@@ -11,20 +11,27 @@ interface DisplayWinnerProps {
 
 const DisplayWinner = ({ winner, color }: DisplayWinnerProps) => (
   <Center>
-    <Text fontSize="3xl" color={color}>
-      Player{" "}
-      {winner === "O" && (
-        <Box w="10" h="10">
-          <CircleMark stroke="#1a91ff" />
-        </Box>
-      )}
-      {winner === "X" && (
-        <Box w="10" h="10">
-          <CrossMark stroke="#f97316" />
-        </Box>
-      )}{" "}
-      Won!
-    </Text>
+    {winner === "O" || winner === "X" ? (
+      <Text fontSize="3xl" color={color}>
+        Player{" "}
+        {winner === "O" && (
+          <Box w="10" h="10">
+            <CircleMark stroke="#1a91ff" />
+          </Box>
+        )}
+        {winner === "X" && (
+          <Box w="10" h="10">
+            <CrossMark stroke="#f97316" />
+          </Box>
+        )}{" "}
+        Won!
+      </Text>
+    ) : (
+      // it's a draw
+      <Text fontSize="3xl" color={color}>
+        It's a Draw
+      </Text>
+    )}
   </Center>
 );
 

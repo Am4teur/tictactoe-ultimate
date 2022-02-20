@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import { Center, Box, HStack, VStack, useColorModeValue } from "native-base";
 import Board from "./Board";
 import { Mark, markEnum } from "../../types/Mark";
@@ -6,14 +12,21 @@ import { ICoord } from "../../types/ICoord";
 import Board3by3Drawish from "../../images/Board/Board3by3Drawish";
 import Board3by3Straight from "../../images/Board/Board3by3Straight";
 import CurrentPlaying from "./CurrentPlaying";
+import { CommonActions } from "@react-navigation/native";
 
 const THREE = 3;
 
 const optionsPlayerMarkEnum = ["O" as Mark, "X" as Mark];
 
 interface TTTGameProps {
-  options: { startMark: number; playerMark: number; boardDesign: number };
+  options: {
+    startMark: number;
+    playerMark: number;
+    boardDesign: number;
+    playingVsAI: boolean;
+  };
   navToWinnerScreen: (winnerMark: Mark) => void;
+  navigation?: any;
 }
 
 export interface SquareData {
@@ -29,19 +42,20 @@ interface BoardData {
   squares: SquareData[][];
 }
 
-export const getPlayerColor = (mark: Mark): string => {
-  // https://docs.nativebase.io/default-theme
+export const getMarkColor = (mark: Mark): string => {
   return mark === "O"
     ? "#1a91ff" // => darkBlue.400
-    : "#f97316"; // => orange.500 OR #dc2626 => red.600
+    : mark === "X"
+    ? "#f97316" // => orange.500 OR #dc2626 => red.600
+    : mark === markEnum.DRAW
+    ? "#737373" // => trueGray.500
+    : useColorModeValue("#000", "#fff");
 };
 
-const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
-  const [playerMark, setPlayerMark] = useState<Mark>(
-    optionsPlayerMarkEnum[options.playerMark]
-  );
-  const isPlayingAI = true;
+const TTTGame = ({ options, navToWinnerScreen, navigation }: TTTGameProps) => {
+  const playerMark = useRef<Mark>(optionsPlayerMarkEnum[options.playerMark]);
   const winner = useRef<Mark>("");
+  const isPlayingAI = options.playingVsAI;
 
   const getEmptySquares = (): SquareData[][] => [
     [
@@ -95,7 +109,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
   };
 
   const nextPlayerMark = () => {
-    return playerMark === "O" ? "X" : "O";
+    return playerMark.current === "O" ? "X" : "O";
   };
 
   const updatePlayableBoards = (
@@ -336,7 +350,7 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
         randomSquare.boardId,
         randomSquare.i,
         randomSquare.j,
-        nextPlayerMark(),
+        playerMark.current,
         true
       );
     }
@@ -358,70 +372,49 @@ const TTTGame = ({ options, navToWinnerScreen }: TTTGameProps) => {
   };
 
   const isBoardPlayable = (boardId: ICoord): boolean => {
+    // to prevent to play after someone wins
+    if (winner.current) return false;
+
     const board = boards[boardId.i][boardId.j];
     if (board.playerWonMark || !board.isPlayable) return false;
     return true;
   };
 
   const onSquarePress = useCallback((boardId: ICoord, i: number, j: number) => {
-    // updateSquare    boards => boards
-    // handleTurn      boards => boards
-    // check if win           boards => _
-    // updatePlayableBoards   boards => boards
-
-    // if 1 vs AI => AI play    === 4 previous steps
-    // if 1 vs 1 => nextPlayerMark
-    // setPlayerMark()
-
-    // setBoards()
-
-    // consideration:
-    // reset que setBoards
-    // AI plays first
-
     if (!isBoardPlayable(boardId)) {
       return;
     }
 
     let newBoards = boards.slice();
 
-    handleTurn(newBoards, boardId, i, j, playerMark);
+    handleTurn(newBoards, boardId, i, j, playerMark.current);
+
+    playerMark.current = nextPlayerMark();
 
     if (isPlayingAI && !winner.current) {
       randomPlayAI(newBoards);
-    } else {
-      setPlayerMark(nextPlayerMark());
+      playerMark.current = nextPlayerMark();
     }
 
     setBoards(newBoards);
   }, []);
-
-  const getLineColor = (): string => {
-    return winner.current === "O"
-      ? "#1a91ff" // => darkBlue.400
-      : winner.current === "X"
-      ? "#f97316" // => orange.500 OR #dc2626 => red.600
-      : winner.current === markEnum.DRAW
-      ? "#737373" // => trueGray.500
-      : useColorModeValue("#000", "#fff");
-  };
 
   return (
     <>
       <VStack>
         {!isPlayingAI ? (
           <CurrentPlaying
-            playerMark={playerMark}
-            color={getPlayerColor(playerMark)}
+            playerMark={playerMark.current}
+            color={getMarkColor(playerMark.current)}
           />
         ) : null}
 
         <Center>
           <Box position="absolute" h="100%" w="100%">
             {options.boardDesign === 0 ? (
-              <Board3by3Straight stroke={getLineColor()} />
+              <Board3by3Straight stroke={getMarkColor(winner.current)} />
             ) : (
-              <Board3by3Drawish stroke={getLineColor()} />
+              <Board3by3Drawish stroke={getMarkColor(winner.current)} />
             )}
           </Box>
           {boards.map((row, i) => (
